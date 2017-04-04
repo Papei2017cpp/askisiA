@@ -27,7 +27,6 @@ public:
 	cost=f;
 	seats=g;
 	rseats=h;
-	cout<<"New flight added";
 	}//constractor for select=='A' (add flights)
 
 };
@@ -46,20 +45,17 @@ char select;//selection manager
 cout<<"Do you want to add(A) remove(B) flights, make (C) or cancel(D) a reservation?";
 cin>>select;
 if (select=='A'){
-	//puting stuff in var
     cout<<"Give the following (required)"<<endl;
     cout<<"Flight Code : ";
     cin>>fcode;
     cout<<"From : ";
-    cin>>from;	
+    cin>>from[2];	
     cout<<"To : ";
-    cin>>to;
-    cout<<"Start time (Hours minutes separated with space) : "; // with space , i cant figure out another method atm '-.-
-    cin>>start.hours>>start.minutes;
-    cout<<"Reach time (Hours minutes separated with space) : ";
-    cin>>reach.hours>>reach.minutes;//need to put everywhere , check for values lengh ;p 
-    //we have to put more variables and fill the 0 below 
-    flight(fcode,from,to,start.hours,reach.hours,0,0,0,0,0);
+    cin>>fcode;
+    cout<<"time : ";
+    cin>>fcode;
+    cout<<"Flight Code : ";
+    cin>>fcode;
 }
 return 0;
 }
