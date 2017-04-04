@@ -5,6 +5,7 @@ using namespace std;
 class flight{
 	
 private://same as main
+	
 	int fcode ,cost,seats,rseats;
 	//  fcode = Flight code cost = ticket cost
 	//  seats = all seats , rseats = reserved seats
@@ -14,12 +15,19 @@ private://same as main
 	}start,reach;
 	char from[2],to[2];
 public:
-	
-	flight(int a, char b[2],char c[2],int d, int e,int dd,int ee, int f,int g, int h){
+	int add(){
+		
+		return 0;
+		}//function to add new flights
+		
+		
+	flight(int a, char b[],char c[],int d, int e,int dd,int ee, int f,int g, int h){
 	//so many things up but dont mind it works lol
 	fcode=a;
-	from[2]=b[2];
-	to[2]=c[2];
+	for (int i=0;i<=2;i++){//repeat to load all word
+		from[i]=b[i];
+		to[i]=c[i];
+	}
 	start.hours=d;
 	start.minutes=e;
 	reach.hours=dd;
@@ -27,12 +35,27 @@ public:
 	cost=f;
 	seats=g;
 	rseats=h;
-	cout<<"New flight added";
+	fstream base;//seting a var in/output file basi.txt
+		base.open("basi.txt",fstream::app);
+		cout<<"Opening databese..."<<endl;
+		//somewhere here should be a search for the FROM airport to sort the database
+		base <<fcode<<"|";
+		for (int i=0;i<2;i++){//to pase the full word
+		base << from[i];
+		}
+		base <<"|";
+		
+		for (int i=0;i<2;i++){//to pase the full word
+		base << to[i];
+		}
+		base << "|"<<start.hours<<":"<<start.minutes<<"|"<<reach.hours<<":"<<reach.minutes<<","<<endl;
+		cout<<"New flight added";
 	}//constractor for select=='A' (add flights)
 
 };
 
 int main(){
+
 int fcode ,cost,seats,rseats;
 //  fcode = Flight code cost = ticket cost
 //  seats = all seats , rseats = reserved seats
@@ -59,7 +82,13 @@ if (select=='A'){
     cout<<"Reach time (Hours minutes separated with space) : ";
     cin>>reach.hours>>reach.minutes;//need to put everywhere , check for values lengh ;p 
     //we have to put more variables and fill the 0 below 
-    flight(fcode,from,to,start.hours,reach.hours,0,0,0,0,0);
+    cout<<"Ticket Cost : ";
+    cin>>cost;	
+    cout<<"All seats  : ";
+    cin>>seats;
+    cout<<"Reserved seats : ";
+    cin>>rseats;	
+    flight(fcode,from,to,start.hours,start.minutes,reach.hours,reach.minutes,cost,seats,rseats);
 }
 return 0;
 }
