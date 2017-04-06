@@ -14,7 +14,7 @@ class btree
         btree();
         void insert(int key);
         node *search(int key);
-        void destroy_tree();
+        void destroy_tree(int key);
 
     private:
         void destroy_tree(node *leaf);
@@ -29,7 +29,7 @@ btree::btree()
 void btree::destroy_tree(node *leaf)
 {
   if(leaf!=NULL)
-  {
+  {//theoritika diagrafw olo to dendro apo tin thesi mnimis mexri to filo THEORITIKA
     destroy_tree(leaf->left);
     destroy_tree(leaf->right);
     delete leaf;
@@ -102,9 +102,9 @@ node *btree::search(int key)
 {
   return search(key, root);
 }
-void btree::destroy_tree()
+void btree::destroy_tree(int key)
 {
-  destroy_tree(root);
+  destroy_tree(search(key));//theoritika vazw tin thesi mnimis pou thelw na diagrapsw
 }
 int main(){
 	btree e;
@@ -115,16 +115,16 @@ int main(){
 	if (p=='a'){
 	cin>>a;
 	e.insert(a);
-	cin>>a;
+	
 	}
 	else if(p=='s'){
 	cin>>a;
 	std::cout<<e.search(a);}
 
-	//else if(p=='d'){
-		//cin>>a;
-		//e.destroy_tree(e.search(a));
-		//}
+	else if(p=='d'){
+		cin>>a;
+		e.destroy_tree(a);
+	}
 		cin>>p;
 	}
 	return 0;
