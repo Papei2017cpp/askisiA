@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <people.h>
 using namespace std;
 
 struct node
@@ -44,7 +45,6 @@ void btree::destroy_tree(node *leaf)
     destroy_tree(leaf->left);
     destroy_tree(leaf->right);
     delete leaf;
-    leaf=NULL;
   }
 }
 int o=0;
@@ -247,7 +247,7 @@ int main(){
 	btree e;
 	char p;
 cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
-
+	//ADD WORKS , REMOVE HALF-WORS SEARCH WORKS , MAKE TO DO , CANCEL TO DO
 	cin>>p;
 	while (p!='N'){
 	int a;
