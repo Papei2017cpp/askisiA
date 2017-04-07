@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <string.h>
 using namespace std;
 
 struct node
@@ -17,7 +17,7 @@ struct node
 		int hours;
 		int minutes;
 	}start,reach;
-	char from[2],to[2];
+	char from[3],to[3];
 };
 class btree
 {
@@ -56,7 +56,44 @@ void btree::insert(int key, node *leaf)
      insert(key, leaf->left);
     else
     {
-      leaf->left=new node;
+	  	  int cost,seats,rseats;
+	  //  cost = ticket cost
+	  //  seats = all seats , rseats = reserved seats
+	  struct time{
+		int hours;
+		int minutes;
+	  }start,reach;
+
+	  std::cout<<"COST:";
+	  std::cin>>cost;
+	  std::cout<<"SEATS:";      
+	  std::cin>>seats;
+	  std::cout<<"RESERVED SEATS:";
+	  std::cin>>rseats;
+	  std::cout<<"START HOUR:";
+	  std::cin>>start.hours>>start.minutes;
+	  std::cout<<"REACH HOUR:";
+	  std::cin>>reach.hours>>reach.minutes;
+	  leaf->left=new node;
+	  std::cout<<"FROM:";
+	  for (int i=0;i!=3;i++)
+	  {
+	  std::cin>>leaf->left->from[i];
+	  }
+	  std::cout<<"TO:";
+	  for (int i=0;i!=3;i++)
+	  {
+	  std::cin>>leaf->left->to[i];
+	  }
+      leaf->left->key_value=key;
+      leaf->left->cost=cost;
+      leaf->left->seats=seats;
+      leaf->left->rseats=rseats;
+      leaf->left->start.hours=start.hours;
+      leaf->left->start.minutes=start.minutes;
+      leaf->left->reach.hours=reach.hours;
+      leaf->left->reach.minutes=reach.minutes;
+      //end of import 
       leaf->left->key_value=key;
 
       leaf->left->left=NULL;    //Sets the left child of the child node to null
@@ -79,7 +116,6 @@ void btree::insert(int key, node *leaf)
 		int hours;
 		int minutes;
 	  }start,reach;
-	  char from[2],to[2];
 	  std::cout<<"COST:";
 	  std::cin>>cost;
 	  std::cout<<"SEATS:";      
@@ -90,11 +126,18 @@ void btree::insert(int key, node *leaf)
 	  std::cin>>start.hours>>start.minutes;
 	  std::cout<<"REACH HOUR:";
 	  std::cin>>reach.hours>>reach.minutes;
-	  std::cout<<"FROM:";
-	  std::cin>>from;
-	  std::cout<<"TO:";
-	  std::cin>>to;//telika kanoun kati alla den to kanoun kala lol >.<
       leaf->right=new node;
+	  std::cout<<"FROM:";
+	  for (int i=0;i!=3;i++)//DUMB STUFF FOR DEBUGING
+	  {
+	  std::cin>>leaf->right->from[i];
+	  }
+	  
+	  std::cout<<"TO:";
+	  	  for (int i=0;i!=3;i++)
+	  {
+	  std::cin>>leaf->right->from[i];//SAME
+	  }
       leaf->right->key_value=key;
       leaf->right->cost=cost;
       leaf->right->seats=seats;
@@ -103,10 +146,6 @@ void btree::insert(int key, node *leaf)
       leaf->right->start.minutes=start.minutes;
       leaf->right->reach.hours=reach.hours;
       leaf->right->reach.minutes=reach.minutes;
-	  for (int i=0;i!=2;i++){//kapou malakizete edw nomizw
-		leaf->right->from[i]=from[i];
-		leaf->right->to[i]=to[i];
-	  }
       //end of import 
       leaf->right->left=NULL;  //Sets the left child of the child node to null
       leaf->right->right=NULL; //Sets the right child of the child node to null
@@ -123,9 +162,20 @@ node *btree::search(int key, node *leaf)
   if(leaf!=NULL)
   {
     if(key==leaf->key_value){
-      cout<<"CODE "<<leaf->key_value<<"\nSEATS "<<leaf->seats<<"\nRESERVED SEATS "<<leaf->rseats<<"\nDEPARTURE TIME "<<leaf->start.hours<<":"<<leaf->start.minutes<<"\nDEPARTURE AIRPORT "<<leaf->from<<
-      "\nARRIVAL AIRPORT "<<leaf->to<<endl;
-      cout<<"kati egine ?";
+      cout<<"CODE "<<leaf->key_value<<"\nSEATS "<<leaf->seats<<"\nRESERVED SEATS "
+	  <<leaf->rseats<<"\nDEPARTURE TIME "<<leaf->start.hours<<":"	 
+	  <<leaf->start.minutes
+		<<"\nARRIVAL TIME "<<leaf->reach.hours<<":"
+	  <<leaf->reach.minutes<<"\nDEPARTURE AIRPORT ";
+		for (int i=0;i!=3;i++){
+		cout<<leaf->from[i];
+		}
+      cout<<"\nARRIVAL AIRPORT ";
+		for (int i=0;i!=3;i++){
+		cout<<leaf->to[i];
+		}
+	  cout<<endl;
+      cout<<endl;
       return leaf;}
     if(key<leaf->key_value)
       return search(key, leaf->left);
@@ -140,9 +190,46 @@ void btree::insert(int key)
     insert(key, root);
   else
   {
+	
     root=new node;
+    	  int cost,seats,rseats;
+	  //  cost = ticket cost
+	  //  seats = all seats , rseats = reserved seats
+	  struct time{
+		int hours;
+		int minutes;
+	  }start,reach;
+	  std::cout<<"COST:";
+	  std::cin>>cost;
+	  std::cout<<"SEATS:";      
+	  std::cin>>seats;
+	  std::cout<<"RESERVED SEATS:";
+	  std::cin>>rseats;
+	  std::cout<<"START HOUR:";
+	  std::cin>>start.hours>>start.minutes;
+	  std::cout<<"REACH HOUR:";
+	  std::cin>>reach.hours>>reach.minutes;
+	  std::cout<<"FROM:";
+	  for (int i=0;i!=3;i++)
+	  {
+	  std::cin>>root->from[i];
+	  }
+	  std::cout<<"TO:";
+	  for (int i=0;i!=3;i++)
+	  {
+	  std::cin>>root->to[i];
+	  }
+      root->key_value=key;
+      root->cost=cost;
+      root->seats=seats;
+      root->rseats=rseats;
+      root->start.hours=start.hours;
+      root->start.minutes=start.minutes;
+      root->reach.hours=reach.hours;
+      root->reach.minutes=reach.minutes;
+      //end of import 
     root->key_value=key;
-    root->left=NULL;
+    root->left=NULL;//arxikopoihsh diefkrinisi kainou
     root->right=NULL;
           std::cout<<"ROOT added\n";
   }
@@ -159,19 +246,24 @@ void btree::destroy_tree(int key)
 int main(){
 	btree e;
 	char p;
+cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
+
 	cin>>p;
 	while (p!='N'){
 	int a;
-	if (p=='a'){
+	if (p=='A'){
+	std::cout<<"CODE:";
 	cin>>a;
 	e.insert(a);
 	
 	}
-	else if(p=='s'){
-	cin>>a;
-	e.search(a);
+ 	else if(p=='S'){
+  	cin>>a;
+
+ 	e.search(a);
 	}
-	else if(p=='d'){
+	else if(p=='B'){
+		cout<<"CODE:";
 		cin>>a;
 		e.destroy_tree(a);
 	}
