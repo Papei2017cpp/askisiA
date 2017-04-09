@@ -4,47 +4,95 @@ using namespace std;
 struct people{
 	//input -> onoma input -> epitheto input -> arithmos diavatiriou input -> ethnikotita input -> diefthinsi input -> thlefono
 	
-	string name,last,street;
-	int flightcode,passport,number,wait;
+	string name,last,street,passport,number;
+	int flightcode,wait;//prepei na ftoia3w to w8 system , einai poli berdemeno lol evala to wait sto allo pragma
 	char origin[3];
 	people *nextwait;
 	};
 class line{
 	public:
-	line();
-	void add(string name,people *location);
+		line();
+		int printcode(people *location);
+		people *search(string name, string last);
+		void add(string name,string last);
 	private:
-	void add();
-	people *start;
+		people *search(string name, string last,people *location);
+		void add(string name,string last,people *location);
+		people *start;
 	};
 line::line(){
 	start=NULL;
 	}
-void line::add(){//first if noone exists ;p
-	if (start==NULL){
+
+void line::add(string name,string last, people *location){//first if noone exists ;p
+	if ((name!=location->name)&&(last!=location->last)){
+		location->nextwait=new people;
 		cout<<"FLIGHT CODE:";
-		cin>>start->flightcode;//gotta check if exists !!!
-		cout<<"FIRST NAME:";
-		cin>>start->name;
-		cout<<"LAST NAME:";
-		cin>>start->last;
+		cin>>location->nextwait->flightcode;//gotta check if exists !!!
+		cin.ignore();
+		location->nextwait->name=name;
+		location->nextwait->last=last;
 		cout<<"STREET ADRESS:";
-		cin>>start->street;
+		cin>>location->nextwait->street;
+		cin.ignore();
 		cout<<"PASSPORT ID:";
-		cin>>start->passport;
+		cin>>location->nextwait->passport;
+		cin.ignore();
 		cout<<"TELEPHONE :";
-		cin>>start->number;
+		cin>>location->nextwait->number;
+		cin.ignore();
+		
+		cin.ignore();
 		//DONT FORGET THE WAIT THING		
 		cout<<"ORIGIN:";
-		cin>>start->origin;
-		start->nextwait=NULL;
+		cin>>location->nextwait->origin;
 		}
 	else{
-		string namee;
-		cin>>namee;
-		add(namee,start);
+		add(name,last,location->nextwait);
 		}
 	}
-void line::add(string name, people *location){//if somebody exists
-	//anadromiki kinisi opou tha kanoume sinexeia ston epomeno 
+void line::add(string name,string last){//if somebody exists
+
+		if (start==NULL){//ean den uparxei kaneis stin oura
+		start=new people;
+		cout<<"FLIGHT CODE:";
+		cin>>start->flightcode;//gotta check if exists !!!
+		cin.ignore();
+		start->name=name;
+		start->last=last;
+		cout<<"STREET ADRESS:";
+		cin>>start->street;
+		cin.ignore();
+		cout<<"PASSPORT ID:";
+		cin>>start->passport;
+		cin.ignore();
+		cout<<"TELEPHONE :";
+		cin>>start->number;
+		cin.ignore();
+		cout<<"ORIGIN:";
+		cin>>start->origin;
+		cin.ignore();
+		start->nextwait=NULL;	
+		}
+	else{
+		add(name,last,start);
+		}
+	}
+
+people *line::search(string name, string last,people *location){
+	if (location!=NULL){
+		if ((name==location->name)&&(name==location->last)){
+			
+			return location;
+			}
+		else{
+			search(name,last,location->nextwait);
+		}
+		}}
+
+people *line::search(string name,string last){
+	return search(name,last,start);//stelnei sto search
+	}
+int line::printcode(people *location){
+	return location->flightcode;
 	}

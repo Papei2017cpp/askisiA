@@ -1,17 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include <people.h>
+#include "people.h"
 using namespace std;
 
 struct node
 {
 	
-  int key_value;
-  node *left;
-  node *right;
-  //dedomena ptisis
-  int fcode ,cost,seats,rseats;
+	int key_value;
+	node *left;
+	node *right;
+	//dedomena ptisis
+	int fcode ,cost,seats,rseats;
 	//  fcode = Flight code cost = ticket cost
 	//  seats = all seats , rseats = reserved seats
 	struct time{
@@ -19,24 +19,36 @@ struct node
 		int minutes;
 	}start,reach;
 	char from[3],to[3];
+
+};
+struct oura{//edw telika tha benei i oura xD
+	string waitingline[3];
+	oura *next;
 };
 class btree
 {
     public:
         btree();
+        
         void insert(int key);
         node *search(int key);
         void destroy_tree(int key);
-
+		int freeseats(node *location){
+			return location->seats-location->rseats;//looking for free seats
+			}
+		void waitmore(int code,string name,string last){//stelnei ta pada sto struct oura
+			
+			};
     private:
         void destroy_tree(node *leaf);
         void insert(int key, node *leaf);
         node *search(int key, node *leaf);
         node *root;
 };
+
 btree::btree()
 {
-  root=NULL;
+	root=NULL;
 }
 void btree::destroy_tree(node *leaf)
 {
@@ -243,11 +255,22 @@ void btree::destroy_tree(int key)
 {
   destroy_tree(search(key));//theoritika vazw tin thesi mnimis pou thelw na diagrapsw
 }
+
+
+
+
+
+
+
+
+
+
 int main(){
+	line t;
 	btree e;
 	char p;
 cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
-	//ADD WORKS , REMOVE HALF-WORS SEARCH WORKS , MAKE TO DO , CANCEL TO DO
+	//ADD WORKS , REMOVE HALF-WORkS SEARCH WORKS , MAKE WORKS , CANCEL TO DO , working on queue
 	cin>>p;
 	while (p!='N'){
 	int a;
@@ -261,6 +284,21 @@ cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(
   	cin>>a;
 
  	e.search(a);
+	}
+	else if(p=='C'){
+  	string b,g;
+  	cout<<"Give NAME and SURNAME :";
+  	cin>>b>>g;
+ 	t.add(b,g);
+	//kai kala diadiasia twra 
+	if(
+	e.freeseats(e.search(t.printcode(t.search(b,g))))==0){
+		//tha ekteli tin waitmore
+		}//search dinei to location kai printcode kanei return ton kwdiko ptisis, to megalo e.search vriskei to location tis thesis mnimis gia to binary tree me ton idio kwdiko
+	//freeseats vriskei tis eleftheres theseis (gia if )
+	else{
+		//prepei na kanoume diadikasia pou na svinei thesi (thelei ligo meleti gia to an prepei na swzei onoma)
+		}
 	}
 	else if(p=='B'){
 		cout<<"CODE:";
