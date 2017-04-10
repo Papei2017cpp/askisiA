@@ -40,10 +40,7 @@ class btree
 		int freeseats(node *location){
 			return location->seats-location->rseats;//looking for free seats
 			}
-		void waitmore(int code,string name,string last){//stelnei ta pada sto struct oura
 
-				waitmore(code,name,last,start);
-				}
 			
     private:
 		void addreserved(node *location){
@@ -51,19 +48,7 @@ class btree
 				location->rseats+=1;
 			
 		}
-		void waitmore(int code,string name,string last,oura *wa){//stelnei ta pada sto struct oura
-			if (wa->waitingline==NULL){
 
-			wa->waitingline[0]=code;
-			wa->waitingline[1]=name;
-			wa->waitingline[2]=last;
-			wa->waitnumber=1;//prepei na ftoia3w athristi gia tous idious kwdikous
-			}
-			else{
-				wa->next=new oura;
-				waitmore(code,name,last,wa->next);
-				}
-			};
 		oura wa,*start;
         void destroy_tree(node *leaf);
         void insert(int key, node *leaf);
@@ -323,14 +308,14 @@ int main(){
 			cout<<"-";
 	}
 	cout<<endl;
-
-		if(	e.freeseats(e.search(h))==0){
+	int k =e.freeseats(e.search(h));
+		if(	k==0){
 			cout<<"ADDING YOU ON QUEUE\n";
 			for (int i=0 ;i<20;i++){//SEPERATOR
 				cout<<"-";
 			}
 			cout<<endl;
-			e.waitmore(h,b,g);
+			//e.waitmore(h,b,g); prepei na to ftoia3w gamw to kerato m
 			}//search dinei to location kai printcode kanei return ton kwdiko ptisis, to megalo e.search vriskei to location tis thesis mnimis gia to binary tree me ton idio kwdiko
 	//freeseats vriskei tis eleftheres theseis (gia if )
 		else{
