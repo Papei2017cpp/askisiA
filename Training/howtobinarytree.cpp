@@ -1,3 +1,4 @@
+//THERE ARE PROBLEMS WHEN THE FREE SEATS ARE 0 
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -11,7 +12,7 @@ struct node
 	node *left;
 	node *right;
 	//dedomena ptisis
-	int fcode ,cost,seats,rseats;
+	int cost,seats,rseats;
 	//  fcode = Flight code cost = ticket cost
 	//  seats = all seats , rseats = reserved seats
 	struct time{
@@ -22,24 +23,48 @@ struct node
 
 };
 struct oura{//edw telika tha benei i oura xD
-	string waitingline[3];
+	string waitingline[2];
+	int waitnumber;
 	oura *next;
 };
 class btree
 {
     public:
         btree();
-        
         void insert(int key);
         node *search(int key);
         void destroy_tree(int key);
+        void addreserved(int key){
+			addreserved(search(key));
+			}
 		int freeseats(node *location){
 			return location->seats-location->rseats;//looking for free seats
 			}
 		void waitmore(int code,string name,string last){//stelnei ta pada sto struct oura
+
+				waitmore(code,name,last,start);
+				}
 			
-			};
     private:
+		void addreserved(node *location){
+			
+				location->rseats+=1;
+			
+		}
+		void waitmore(int code,string name,string last,oura *wa){//stelnei ta pada sto struct oura
+			if (wa->waitingline==NULL){
+
+			wa->waitingline[0]=code;
+			wa->waitingline[1]=name;
+			wa->waitingline[2]=last;
+			wa->waitnumber=1;//prepei na ftoia3w athristi gia tous idious kwdikous
+			}
+			else{
+				wa->next=new oura;
+				waitmore(code,name,last,wa->next);
+				}
+			};
+		oura wa,*start;
         void destroy_tree(node *leaf);
         void insert(int key, node *leaf);
         node *search(int key, node *leaf);
@@ -269,10 +294,11 @@ int main(){
 	line t;
 	btree e;
 	char p;
-cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
+	cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
 	//ADD WORKS , REMOVE HALF-WORkS SEARCH WORKS , MAKE WORKS , CANCEL TO DO , working on queue
 	cin>>p;
 	while (p!='N'){
+	
 	int a;
 	if (p=='A'){
 	std::cout<<"CODE:";
@@ -287,25 +313,52 @@ cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(
 	}
 	else if(p=='C'){
   	string b,g;
-  	cout<<"Give NAME and SURNAME :";
-  	cin>>b>>g;
- 	t.add(b,g);
+  	int h;
+  	cout<<"Give NAME and SURNAME and FLIGHT CODE(s):";
+  	cin>>b>>g>>h;
+ 	t.add(b,g,h);//na valw kai code input tha peta3ei error
 	//kai kala diadiasia twra 
-	if(
-	e.freeseats(e.search(t.printcode(t.search(b,g))))==0){
-		//tha ekteli tin waitmore
-		}//search dinei to location kai printcode kanei return ton kwdiko ptisis, to megalo e.search vriskei to location tis thesis mnimis gia to binary tree me ton idio kwdiko
+	cout<<"\n\nFLIGHT'S DETAILS"<<endl;
+	for (int i=0 ;i<20;i++){//SEPERATOR
+			cout<<"-";
+	}
+	cout<<endl;
+
+		if(	e.freeseats(e.search(h))==0){
+			cout<<"ADDING YOU ON QUEUE\n";
+			for (int i=0 ;i<20;i++){//SEPERATOR
+				cout<<"-";
+			}
+			cout<<endl;
+			e.waitmore(h,b,g);
+			}//search dinei to location kai printcode kanei return ton kwdiko ptisis, to megalo e.search vriskei to location tis thesis mnimis gia to binary tree me ton idio kwdiko
 	//freeseats vriskei tis eleftheres theseis (gia if )
-	else{
+		else{
+			cout<<"SEAT RESERVED\n";
+			for (int i=0 ;i<20;i++){//SEPERATOR
+				cout<<"-";
+			}
+			cout<<endl;
+			e.addreserved(h);
 		//prepei na kanoume diadikasia pou na svinei thesi (thelei ligo meleti gia to an prepei na swzei onoma)
+		// telika to kanw me ena aplo -1 sta rseats lol , an den einai okay to allazoume
+		
 		}
 	}
 	else if(p=='B'){
 		cout<<"CODE:";
 		cin>>a;
 		e.destroy_tree(a);
+	}else{
+		cout<<"Please type one of the characters below"<<endl;
 	}
-		cin>>p;
+	for (int i=0 ;i<20;i++){//SEPERATOR
+		cout<<"-";
+	}
+	cout<<endl;
+	cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
+	cin>>p;
+	
 	}
 	return 0;
 }

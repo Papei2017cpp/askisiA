@@ -4,9 +4,9 @@ using namespace std;
 struct people{
 	//input -> onoma input -> epitheto input -> arithmos diavatiriou input -> ethnikotita input -> diefthinsi input -> thlefono
 	
-	string name,last,street,passport,number;
+	string name,last,street,passport,number,origin;
 	int flightcode,wait;//prepei na ftoia3w to w8 system , einai poli berdemeno lol evala to wait sto allo pragma
-	char origin[3];
+	
 	people *nextwait;
 	};
 class line{
@@ -14,21 +14,21 @@ class line{
 		line();
 		int printcode(people *location);
 		people *search(string name, string last);
-		void add(string name,string last);
+		void add(string name,string last,int code);
 	private:
 		people *search(string name, string last,people *location);
-		void add(string name,string last,people *location);
+		void add(string name,string last,int code, people *location);
 		people *start;
 	};
 line::line(){
 	start=NULL;
 	}
 
-void line::add(string name,string last, people *location){//first if noone exists ;p
+void line::add(string name,string last,int code, people *location){//first if noone exists ;p
 	if ((name!=location->name)&&(last!=location->last)){
 		location->nextwait=new people;
-		cout<<"FLIGHT CODE:";
-		cin>>location->nextwait->flightcode;//gotta check if exists !!!
+
+		location->nextwait->flightcode=code;//gotta check if exists !!!
 		cin.ignore();
 		location->nextwait->name=name;
 		location->nextwait->last=last;
@@ -41,22 +41,19 @@ void line::add(string name,string last, people *location){//first if noone exist
 		cout<<"TELEPHONE :";
 		cin>>location->nextwait->number;
 		cin.ignore();
-		
-		cin.ignore();
 		//DONT FORGET THE WAIT THING		
 		cout<<"ORIGIN:";
 		cin>>location->nextwait->origin;
 		}
 	else{
-		add(name,last,location->nextwait);
+		add(name,last,code,location->nextwait);
 		}
 	}
-void line::add(string name,string last){//if somebody exists
+void line::add(string name,string last,int code){//if somebody exists
 
 		if (start==NULL){//ean den uparxei kaneis stin oura
 		start=new people;
-		cout<<"FLIGHT CODE:";
-		cin>>start->flightcode;//gotta check if exists !!!
+		start->flightcode=code;//gotta check if exists !!!
 		cin.ignore();
 		start->name=name;
 		start->last=last;
@@ -71,11 +68,10 @@ void line::add(string name,string last){//if somebody exists
 		cin.ignore();
 		cout<<"ORIGIN:";
 		cin>>start->origin;
-		cin.ignore();
-		start->nextwait=NULL;	
+
 		}
 	else{
-		add(name,last,start);
+		add(name,last,code,start);
 		}
 	}
 
