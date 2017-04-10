@@ -35,12 +35,24 @@ class btree
         node *search(int key);
         void destroy_tree(int key);
         void addreserved(int key){
-			addreserved(search(key));
+			addreserved(search(key));//add 1 more to reserved
 			}
 		int freeseats(node *location){
 			return location->seats-location->rseats;//looking for free seats
 			}
+		void addqueue(string name, string last, int code){//jump to private
+			if (start==NULL){
+				start=new oura;
+				start->waitingline[0]=name;
+				start->waitingline[1]=last;
+				start->waitingline[2]=code;
+				start->waitnumber=1;
+				start->next=NULL;
+			}else{
+			addqueue(name,last,code,start);	
+			}
 
+		}
 			
     private:
 		void addreserved(node *location){
@@ -48,8 +60,20 @@ class btree
 				location->rseats+=1;
 			
 		}
-
-		oura wa,*start;
+		void addqueue(string name,string last,int code, oura *wa){
+			if (wa==NULL){
+				wa=new oura;
+				wa->waitingline[0]=name;
+				wa->waitingline[1]=last;
+				wa->waitingline[2]=code;
+				wa->waitnumber=1;
+				wa->next=NULL;
+				cout<<"Added on queue";
+			}else{
+				addqueue(name,last,code,wa->next);
+				}
+		}
+		oura *start;
         void destroy_tree(node *leaf);
         void insert(int key, node *leaf);
         node *search(int key, node *leaf);
@@ -59,6 +83,7 @@ class btree
 btree::btree()
 {
 	root=NULL;
+	start=NULL;
 }
 void btree::destroy_tree(node *leaf)
 {
@@ -315,7 +340,7 @@ int main(){
 				cout<<"-";
 			}
 			cout<<endl;
-			//e.waitmore(h,b,g); prepei na to ftoia3w gamw to kerato m
+			e.addqueue(b,g,h);
 			}//search dinei to location kai printcode kanei return ton kwdiko ptisis, to megalo e.search vriskei to location tis thesis mnimis gia to binary tree me ton idio kwdiko
 	//freeseats vriskei tis eleftheres theseis (gia if )
 		else{
