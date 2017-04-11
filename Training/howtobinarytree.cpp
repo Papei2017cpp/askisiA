@@ -361,6 +361,11 @@ int main(){
   	cout<<"Give NAME and SURNAME and FLIGHT CODE(s):";
   	cin>>b>>g>>h;
  	t.add(b,g,h);//na valw kai code input tha peta3ei error
+ 	  	while((e.search(h)==0)||(h==0)){
+	cout<<"Please put the right code / or put multiple codes and end with 0"<<endl;
+	cin>>h;	
+	if ((e.search(h)!=0)&&(h!=0)){
+		
 	//kai kala diadiasia twra 
 	cout<<"\n\nFLIGHT'S DETAILS"<<endl;
 	for (int i=0 ;i<20;i++){//SEPERATOR
@@ -386,7 +391,7 @@ int main(){
 			e.addreserved(h);
 		//prepei na kanoume diadikasia pou na svinei thesi (thelei ligo meleti gia to an prepei na swzei onoma)
 		// telika to kanw me ena aplo -1 sta rseats lol , an den einai okay to allazoume
-		
+	}}
 		}
 	}
 	else if(p=='B'){
