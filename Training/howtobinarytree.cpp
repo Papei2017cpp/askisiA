@@ -81,13 +81,16 @@ class btree
 				//prepei na alla3w twra ton arithmo twn epomenwn
 				delete location;
 				location=NULL;
+				cout<<"You have been removed from queue";
 				}
 			else{
 			removereserved(name,last,code,location->next)	;
+			
 			}
 			}
 		else{
 				reserved(search(code),-1);
+				cout<<"You dont reserve a seat anymore";
 			}	
 			}
 		void addqueue(string name,string last,int code, oura *wa){
@@ -98,7 +101,7 @@ class btree
 				wa->waitingcode=code;
 				searchqueue(code,wa);
 				wa->next=NULL;
-				cout<<"Added on queue";
+				cout<<"Added on queue , you are the number"<<wa->waitnumber<<endl;
 			}else{
 				addqueue(name,last,code,wa->next);
 				}
@@ -122,6 +125,7 @@ void btree::destroy_tree(node *leaf)
     destroy_tree(leaf->left);
     destroy_tree(leaf->right);
     delete leaf;
+    cout<<"FLIGHT DELETED";
   }
 }
 int o=0;

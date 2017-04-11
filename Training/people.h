@@ -25,7 +25,7 @@ line::line(){
 	}
 
 void line::add(string name,string last,int code, people *location){//first if noone exists ;p
-	if ((name!=location->name)&&(last!=location->last)){
+	if (location->nextwait==NULL){//EDW SPAEI sto 2o
 		location->nextwait=new people;
 
 		location->nextwait->flightcode=code;//gotta check if exists !!!
@@ -44,6 +44,7 @@ void line::add(string name,string last,int code, people *location){//first if no
 		//DONT FORGET THE WAIT THING		
 		cout<<"ORIGIN:";
 		cin>>location->nextwait->origin;
+		location->nextwait->nextwait=NULL;
 		}
 	else{
 		add(name,last,code,location->nextwait);
