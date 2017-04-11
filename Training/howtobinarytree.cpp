@@ -1,4 +1,3 @@
-//THERE ARE PROBLEMS WHEN THE FREE SEATS ARE 0 
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -23,7 +22,8 @@ struct node
 
 };
 struct oura{//edw telika tha benei i oura xD
-	string waitingline[2];
+	string waitingline[1];
+	int waitingcode;
 	int waitnumber;
 	oura *next;
 };
@@ -35,7 +35,10 @@ class btree
         node *search(int key);
         void destroy_tree(int key);
         void addreserved(int key){
-			addreserved(search(key));//add 1 more to reserved
+			reserved(search(key),1);//add 1 more to reserved
+			}
+		void removereserved(string name,string last,int key){//jump to private
+			removereserved(name,last,key,start);
 			}
 		int freeseats(node *location){
 			return location->seats-location->rseats;//looking for free seats
@@ -45,28 +48,55 @@ class btree
 				start=new oura;
 				start->waitingline[0]=name;
 				start->waitingline[1]=last;
-				start->waitingline[2]=code;
+				start->waitingcode=code;
 				start->waitnumber=1;
 				start->next=NULL;
 			}else{
 			addqueue(name,last,code,start);	
+			}}
+		void searchqueue(int code,oura *location){//search for how many members with this code exists and put it in waitnumber
+			oura *i=start;
+			int j=1;
+			while (i!=location){
+				if (i->waitingcode==location->waitingcode){
+					j+=1;
+					
+				}
 			}
-
-		}
+			location->waitnumber=j;
+			}
+			
 			
     private:
-		void addreserved(node *location){
+		void reserved(node *location,int f){
 			
-				location->rseats+=1;
+				location->rseats+=f;
 			
 		}
+		void removereserved(string name, string last , int code,oura *location){
+		//should check for names in queue , and remove from queue if exists , or simply delete 1 reservation
+		
+		if (location!=NULL){
+			if ((location->waitingline[0]==name)&&(location->waitingline[1]==last)&&(location->waitingcode==code)){
+				//prepei na alla3w twra ton arithmo twn epomenwn
+				delete location;
+				location=NULL;
+				}
+			else{
+			removereserved(name,last,code,location->next)	;
+			}
+			}
+		else{
+				reserved(search(code),-1);
+			}	
+			}
 		void addqueue(string name,string last,int code, oura *wa){
 			if (wa==NULL){
 				wa=new oura;
 				wa->waitingline[0]=name;
 				wa->waitingline[1]=last;
-				wa->waitingline[2]=code;
-				wa->waitnumber=1;
+				wa->waitingcode=code;
+				searchqueue(code,wa);
 				wa->next=NULL;
 				cout<<"Added on queue";
 			}else{
@@ -359,7 +389,14 @@ int main(){
 		cout<<"CODE:";
 		cin>>a;
 		e.destroy_tree(a);
-	}else{
+	}	else if(p=='D'){
+  	string b,g;
+  	int h;
+  	cout<<"Give NAME and SURNAME and FLIGHT CODE(s):";
+  	cin>>b>>g>>h;
+  	e.removereserved(b,g,h);
+  	}
+  	else{
 		cout<<"Please type one of the characters below"<<endl;
 	}
 	for (int i=0 ;i<20;i++){//SEPERATOR
