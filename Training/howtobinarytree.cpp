@@ -6,7 +6,7 @@ using namespace std;
 
 struct node
 {
-	
+
 	int key_value;
 	node *left;
 	node *right;
@@ -52,7 +52,7 @@ class btree
 				start->waitnumber=1;
 				start->next=NULL;
 			}else{
-			addqueue(name,last,code,start);	
+			addqueue(name,last,code,start);
 			}}
 		void searchqueue(int code,oura *location){//search for how many members with this code exists and put it in waitnumber
 			oura *i=start;
@@ -60,22 +60,22 @@ class btree
 			while (i!=location){
 				if (i->waitingcode==location->waitingcode){
 					j+=1;
-					
+
 				}
 			}
 			location->waitnumber=j;
 			}
-			
-			
+
+
     private:
 		void reserved(node *location,int f){
-			
+
 				location->rseats+=f;
-			
+
 		}
 		void removereserved(string name, string last , int code,oura *location){
 		//should check for names in queue , and remove from queue if exists , or simply delete 1 reservation
-		
+
 		if (location!=NULL){
 			if ((location->waitingline[0]==name)&&(location->waitingline[1]==last)&&(location->waitingcode==code)){
 				//prepei na alla3w twra ton arithmo twn epomenwn
@@ -85,13 +85,13 @@ class btree
 				}
 			else{
 			removereserved(name,last,code,location->next)	;
-			
+
 			}
 			}
 		else{
 				reserved(search(code),-1);
 				cout<<"You dont reserve a seat anymore";
-			}	
+			}
 			}
 		void addqueue(string name,string last,int code, oura *wa){
 			if (wa==NULL){
@@ -108,9 +108,11 @@ class btree
 		}
 		oura *start;
         void destroy_tree(node *leaf);
+        void delete_key(node *leaf,node *tobedeleted);
         void insert(int key, node *leaf);
         node *search(int key, node *leaf);
         node *root;
+        bool isleaf(node *leaf);
 };
 
 btree::btree()
@@ -127,6 +129,25 @@ void btree::destroy_tree(node *leaf)
     delete leaf;
     cout<<"FLIGHT DELETED";
   }
+}
+bool btree::isleaf(node *leaf){
+return ((leaf->left==NULL)&&(leaf->right==NULL));
+}
+void btree::delete_key(node *leaf,node *tobedeleted)// NOT YET COMPLETED WE HAVE TO SOMEHOW FIND OUT HOW TO DELETE A KEY !!!!
+{
+
+    if(leaf!=NULL){//an einai keno to key tote ti na to kanw lol
+    //an de3ia i aristera einai filo tote allazoume to tobedeleted me to de3i i aristero filo kai svinoume to leaf me destry_tree()
+        if ((leaf->left==NULL)&&(leaf->right==NULL)){
+            //metakinoume ta stixeia leaf ->tobedeleted
+            destroy_tree(leaf);
+        }
+        else if (isleaf(leaf->right)){
+
+        }
+        else if (leaf->left!=NULL){ //alliws an to aristero katw exei de3i filo tote alla3e to tobedeleted me to leaf kai svise to leaf
+        }
+    }//kourastika na skeftomai lol 1 wra gamw kai 3 selides kai telika den ekana sxedwn tpt esvina kai egrafa
 }
 int o=0;
 void btree::insert(int key, node *leaf)
@@ -147,7 +168,7 @@ void btree::insert(int key, node *leaf)
 
 	  std::cout<<"COST:";
 	  std::cin>>cost;
-	  std::cout<<"SEATS:";      
+	  std::cout<<"SEATS:";
 	  std::cin>>seats;
 	  std::cout<<"RESERVED SEATS:";
 	  std::cin>>rseats;
@@ -174,22 +195,22 @@ void btree::insert(int key, node *leaf)
       leaf->left->start.minutes=start.minutes;
       leaf->left->reach.hours=reach.hours;
       leaf->left->reach.minutes=reach.minutes;
-      //end of import 
+      //end of import
       leaf->left->key_value=key;
 
       leaf->left->left=NULL;    //Sets the left child of the child node to null
       leaf->left->right=NULL;   //Sets the right child of the child node to null
 	  std::cout<<"New flightcode added left\n";
 		o=0;
-    }  
-    
+    }
+
   }
   else if(key>=leaf->key_value)
   {
     if(leaf->right!=NULL)
       insert(key, leaf->right);
     else
-    {	
+    {
 	  int cost,seats,rseats;
 	  //  cost = ticket cost
 	  //  seats = all seats , rseats = reserved seats
@@ -199,7 +220,7 @@ void btree::insert(int key, node *leaf)
 	  }start,reach;
 	  std::cout<<"COST:";
 	  std::cin>>cost;
-	  std::cout<<"SEATS:";      
+	  std::cout<<"SEATS:";
 	  std::cin>>seats;
 	  std::cout<<"RESERVED SEATS:";
 	  std::cin>>rseats;
@@ -213,7 +234,7 @@ void btree::insert(int key, node *leaf)
 	  {
 	  std::cin>>leaf->right->from[i];
 	  }
-	  
+
 	  std::cout<<"TO:";
 	  	  for (int i=0;i!=3;i++)
 	  {
@@ -227,7 +248,7 @@ void btree::insert(int key, node *leaf)
       leaf->right->start.minutes=start.minutes;
       leaf->right->reach.hours=reach.hours;
       leaf->right->reach.minutes=reach.minutes;
-      //end of import 
+      //end of import
       leaf->right->left=NULL;  //Sets the left child of the child node to null
       leaf->right->right=NULL; //Sets the right child of the child node to null
 	  std::cout<<"New flightcode added right\n";
@@ -244,7 +265,7 @@ node *btree::search(int key, node *leaf)
   {
     if(key==leaf->key_value){
       cout<<"CODE "<<leaf->key_value<<"\nSEATS "<<leaf->seats<<"\nRESERVED SEATS "
-	  <<leaf->rseats<<"\nDEPARTURE TIME "<<leaf->start.hours<<":"	 
+	  <<leaf->rseats<<"\nDEPARTURE TIME "<<leaf->start.hours<<":"
 	  <<leaf->start.minutes
 		<<"\nARRIVAL TIME "<<leaf->reach.hours<<":"
 	  <<leaf->reach.minutes<<"\nDEPARTURE AIRPORT ";
@@ -271,7 +292,7 @@ void btree::insert(int key)
     insert(key, root);
   else
   {
-	
+
     root=new node;
     	  int cost,seats,rseats;
 	  //  cost = ticket cost
@@ -282,7 +303,7 @@ void btree::insert(int key)
 	  }start,reach;
 	  std::cout<<"COST:";
 	  std::cin>>cost;
-	  std::cout<<"SEATS:";      
+	  std::cout<<"SEATS:";
 	  std::cin>>seats;
 	  std::cout<<"RESERVED SEATS:";
 	  std::cin>>rseats;
@@ -308,7 +329,7 @@ void btree::insert(int key)
       root->start.minutes=start.minutes;
       root->reach.hours=reach.hours;
       root->reach.minutes=reach.minutes;
-      //end of import 
+      //end of import
     root->key_value=key;
     root->left=NULL;//arxikopoihsh diefkrinisi kainou
     root->right=NULL;
@@ -342,13 +363,13 @@ int main(){
 	//ADD WORKS , REMOVE HALF-WORkS SEARCH WORKS , MAKE WORKS , CANCEL TO DO , working on queue
 	cin>>p;
 	while (p!='N'){
-	
+
 	int a;
 	if (p=='A'){
 	std::cout<<"CODE:";
 	cin>>a;
 	e.insert(a);
-	
+
 	}
  	else if(p=='S'){
   	cin>>a;
@@ -363,10 +384,10 @@ int main(){
  	t.add(b,g,h);//na valw kai code input tha peta3ei error
  	  	while((e.search(h)==0)||(h==0)){
 	cout<<"Please put the right code / or put multiple codes and end with 0"<<endl;
-	cin>>h;	
+	cin>>h;
 	if ((e.search(h)!=0)&&(h!=0)){
-		
-	//kai kala diadiasia twra 
+
+	//kai kala diadiasia twra
 	cout<<"\n\nFLIGHT'S DETAILS"<<endl;
 	for (int i=0 ;i<20;i++){//SEPERATOR
 			cout<<"-";
@@ -414,7 +435,7 @@ int main(){
 	cout<<endl;
 	cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
 	cin>>p;
-	
+
 	}
 	return 0;
 }
