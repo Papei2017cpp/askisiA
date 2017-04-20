@@ -65,7 +65,7 @@ class btree
 			}
 			location->waitnumber=j;
 			}
-
+	void delete_key(int key);
 
     private:
 		void reserved(node *location,int f){
@@ -115,6 +115,9 @@ class btree
         bool isleaf(node *leaf);
 };
 
+
+
+
 btree::btree()
 {
 	root=NULL;
@@ -131,24 +134,53 @@ void btree::destroy_tree(node *leaf)
   }
 }
 bool btree::isleaf(node *leaf){
+if (leaf!=NULL){
 return ((leaf->left==NULL)&&(leaf->right==NULL));
+}
+else{
+return false;	
+};
+}
+void btree::delete_key(int key)//public
+{	
+	node *leaf=search(key);
+	if(leaf!=NULL){//an einai keno to key tote ti na to kanw lol
+    //an de3ia i aristera einai filo tote allazoume to tobedeleted me to de3i i aristero filo kai svinoume to leaf me destry_tree()
+        if (isleaf(leaf)){
+            destroy_tree(leaf);
+        }
+        else if (isleaf(leaf->left)){
+			leaf=leaf->left;//thelw na elpizw oti tha ta kanei ola isa 
+			destroy_tree(leaf->left);
+		}
+		else if (isleaf(leaf->right)){
+			leaf=leaf->right;
+			destroy_tree(leaf->right);
+		}
+		else if ((leaf->left!=NULL)&&(leaf->left->right==NULL)){//an yparxei kai den eina filo kai einai mia seira 
+			leaf->right=leaf->left->right;//gia na min xasoume to de3i dendro
+			leaf=leaf->left;
+			destroy_tree(leaf->left);
+		}
+		else if ((leaf->right!=NULL)&&(leaf->right->left==NULL)){
+			leaf->left=leaf->right->left;
+			leaf=leaf->right;
+			destroy_tree(leaf->right);
+			}
+		else{
+			delete_key(leaf,leaf);//steile sto prive ;p
+		}
+	}
 }
 void btree::delete_key(node *leaf,node *tobedeleted)// NOT YET COMPLETED WE HAVE TO SOMEHOW FIND OUT HOW TO DELETE A KEY !!!!
 {
+	if ((leaf->right==NULL)&&(leaf->left!=NULL)){
 
-    if(leaf!=NULL){//an einai keno to key tote ti na to kanw lol
-    //an de3ia i aristera einai filo tote allazoume to tobedeleted me to de3i i aristero filo kai svinoume to leaf me destry_tree()
-        if ((leaf->left==NULL)&&(leaf->right==NULL)){
-            //metakinoume ta stixeia leaf ->tobedeleted
-            destroy_tree(leaf);
-        }
-        else if (isleaf(leaf->right)){
+		
+		
+	}
 
-        }
-        else if (leaf->left!=NULL){ //alliws an to aristero katw exei de3i filo tote alla3e to tobedeleted me to leaf kai svise to leaf
-        }
-    }//kourastika na skeftomai lol 1 wra gamw kai 3 selides kai telika den ekana sxedwn tpt esvina kai egrafa
-}
+}//kourastika na skeftomai lol 1 wra gamw kai 3 selides kai telika den ekana sxedwn tpt esvina kai egrafa
 int o=0;
 void btree::insert(int key, node *leaf)
 {
@@ -360,7 +392,7 @@ int main(){
 	btree e;
 	char p;
 	cout<<"Do you want to add(A) remove(B) search(S) flights ,\n make (C) or cancel(D) a reservation?";
-	//ADD WORKS , REMOVE HALF-WORkS SEARCH WORKS , MAKE WORKS , CANCEL TO DO , working on queue
+	//ADD WORKS , REMOVE TO BE COMPLETED , SEARCH WORKS , MAKE WORKS , CANCEL TO DO , QUEUE Doesnt release when freeseats arent 0 yet
 	cin>>p;
 	while (p!='N'){
 
