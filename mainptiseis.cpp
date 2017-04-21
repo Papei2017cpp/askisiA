@@ -21,6 +21,7 @@ struct line{
 class btreeandline{
     public:
         btreeandline();
+		//TREE
         node *search(int key);
         node *previous(int key);
         void addflight(int key);
@@ -30,7 +31,7 @@ class btreeandline{
         bool isleaf(int key);
         void reserved(int key , int a);//Το a μπορει να ειναι 1 η -1 αναλογα με το τι κανουμε
 
-
+		//LINE
         void addqueue(int key,string first,string last);
         void removequeue(int key,string first, string last);
         void removeall(int key);
@@ -41,6 +42,9 @@ class btreeandline{
         void addflight(int key, node *leaf);
         void loudsearch(int key,node *leaf);
         void deleteflight(node *leaf);
+        int  freeseats(int key,node *leaf);
+        void reserved(int key , int a,node *leaf);
+        bool isleaf(int key,node *leaf);
         //tbc
 		line *start;
 };
@@ -122,6 +126,8 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 }
 
 
+
+
 node *btreeandline::search(int key){//PUBLIC
 	if (root!=NULL){
 		return search(key,root);
@@ -147,22 +153,59 @@ node *btreeandline::search(int key, node *leaf){//PRIVATE
 	}
 }//Dont care about the error created here
 
+
+
+
 void btreeandline::loudsearch(int key){//PUBLIC
 	loudsearch(key,search(key));
 	
 }
 void btreeandline::loudsearch(int key,node *leaf){//PRIVATE
-	cout<<"FLIGHT DETAILS"<<endl;
-	cout<<"CODE :"<<leaf->key<<endl;
-	cout<<"COST:"<<leaf->cost<<endl;
-	cout<<"SEATS :"<<leaf->seats<<endl;
-	cout<<"RESERVED SEATS :"<<leaf->rseats<<endl;
-	cout<<"FLGHT TIME :"<<leaf->start.hours<<":"<<leaf->start.minutes<<endl;
-	cout<<"LAND TIME :"<<leaf->reach.hours<<":"<<leaf->reach.minutes<<endl;
-	cout<<"FROM :"<<leaf->from<<endl;
-	cout<<"TO :"<<leaf->to<<endl;
+	if (leaf!=NULL){
+		cout<<"FLIGHT DETAILS"<<endl;
+		cout<<"CODE :"<<leaf->key<<endl;
+		cout<<"COST:"<<leaf->cost<<endl;
+		cout<<"SEATS :"<<leaf->seats<<endl;
+		cout<<"RESERVED SEATS :"<<leaf->rseats<<endl;
+		cout<<"FLGHT TIME :"<<leaf->start.hours<<":"<<leaf->start.minutes<<endl;
+		cout<<"LAND TIME :"<<leaf->reach.hours<<":"<<leaf->reach.minutes<<endl;
+		cout<<"FROM :"<<leaf->from<<endl;
+		cout<<"TO :"<<leaf->to<<endl;
+	}
 
 }
+
+
+
+int btreeandline::freeseats(int key){//PUBLIC
+	return freeseats(key,search(key));
+}
+int btreeandline::freeseats(int key,node *leaf){//PUBLIC
+	return ((leaf->seats)-(leaf->rseats));	
+}
+
+
+
+
+bool btreeandline::isleaf(int key){//PUBLIC
+	return isleaf(key,search(key));
+}
+bool btreeandline::isleaf(int key,node *leaf){//PRIVATE
+	return ((leaf->left==NULL)&&(leaf->right==NULL));
+}
+
+
+
+
+void btreeandline::reserved(int key,int a){//PUBLIC
+	reserved(key,a,search(key));
+}
+void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
+	if (freeseats(key)>0){
+		leaf->rseats+=a*1;
+	}
+}
+
 
 
 int main(){
