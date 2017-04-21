@@ -46,12 +46,18 @@ class btreeandline{
 };
 
 
+
+
+
+
+
 btreeandline::btreeandline(){
 	root=NULL;
 	start=NULL;
 }
-//LINE
+
 //NODE
+
 void btreeandline::addflight(int key){//PUBLIC
 	if (root==NULL){
 		root=new node;
@@ -79,7 +85,6 @@ void btreeandline::addflight(int key){//PUBLIC
 	addflight(key,root);
 	}
 }
-
 void btreeandline::addflight(int key,node *leaf){//PRIVATE
 	if (leaf!=NULL){
 		if (key>leaf->key){
@@ -117,6 +122,47 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 }
 
 
+node *btreeandline::search(int key){//PUBLIC
+	if (root!=NULL){
+		return search(key,root);
+	}
+	else{
+		return NULL;
+	}
+}
+node *btreeandline::search(int key, node *leaf){//PRIVATE
+	if (leaf!=NULL){
+		if (key==leaf->key){
+			return leaf;
+		}
+		else if (key>leaf->key){
+			search(key,leaf->right);
+		}
+		else if (key<leaf->key){
+			search(key,leaf->left);
+		}	
+	}
+	else{
+	return NULL;
+	}
+}//Dont care about the error created here
+
+void btreeandline::loudsearch(int key){//PUBLIC
+	loudsearch(key,search(key));
+	
+}
+void btreeandline::loudsearch(int key,node *leaf){//PRIVATE
+	cout<<"FLIGHT DETAILS"<<endl;
+	cout<<"CODE :"<<leaf->key<<endl;
+	cout<<"COST:"<<leaf->cost<<endl;
+	cout<<"SEATS :"<<leaf->seats<<endl;
+	cout<<"RESERVED SEATS :"<<leaf->rseats<<endl;
+	cout<<"FLGHT TIME :"<<leaf->start.hours<<":"<<leaf->start.minutes<<endl;
+	cout<<"LAND TIME :"<<leaf->reach.hours<<":"<<leaf->reach.minutes<<endl;
+	cout<<"FROM :"<<leaf->from<<endl;
+	cout<<"TO :"<<leaf->to<<endl;
+
+}
 
 
 int main(){
@@ -125,16 +171,21 @@ int main(){
 	int key;
 
 	cout<<"SELECT :"<<endl;
-	cout<<"A FOR ADD FLIGHT"<<endl;
+	cout<<"A TO ADD FLIGHT"<<endl;
+	cout<<"S TO SEARCH FLIGHT"<<endl;
 	cout<<"X TO QUIT"<<endl;
 	cin>>S;
 	while(S!='X'){
 		if (S=='A'){
-		cout<<"GIVE FLIGHTCODE: ";
-		cin>>key;
-		a.addflight(key);
+			cout<<"GIVE FLIGHTCODE: ";
+			cin>>key;
+			a.addflight(key);
 		}
-
+		if (S=='S'){
+			cout<<"GIVE FLIGHTCODE";
+			cin>>key;
+			a.loudsearch(key);
+		}
 		cout<<"SELECT :"<<endl;
 		cin>>S;
 	}
