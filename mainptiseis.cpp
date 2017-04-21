@@ -39,7 +39,7 @@ class btreeandline{
         node *root;
         node *search(int key,node *leaf);
         node *previous(int key,node *leaf);
-        void addfight(int key, node *leaf);
+        void addflight(int key, node *leaf);
         void loudsearch(int key,node *leaf);
         void deleteflight(node *leaf);
         //tbc
@@ -70,9 +70,10 @@ void btreeandline::addflight(int key){//PUBLIC
 		cin>>root->to[3];
 	}
 	else{
-	addflight(key,root)
+	addflight(key,root);
 	}
 }
 
 void btreeandline::addflight(int key,node *leaf){
+	
 }
