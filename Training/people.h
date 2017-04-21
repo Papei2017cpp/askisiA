@@ -12,20 +12,23 @@ struct people{
 class line{
 	public:
 		line();
+		void remove(string name , string last , int code);//to be done
 		int printcode(people *location);
-		people *search(string name, string last);
+		people *search(string name, string last,int key);
 		void add(string name,string last,int code);
 	private:
-		people *search(string name, string last,people *location);
+		people *search(string name, string last,int key,people *location);
 		void add(string name,string last,int code, people *location);
 		people *start;
+		people *previous(string name,string last,int key,people *location);//tha dinei ton akrivos proigoumeno arithmo
+		void remove(people *location);//tha allazei to nextwait me to epomeno apo to people p exoume 
 	};
 line::line(){
 	start=NULL;
 	}
 
 void line::add(string name,string last,int code, people *location){//first if noone exists ;p
-	if (location->nextwait==NULL){//EDW SPAEI sto 2o
+	if (location->nextwait==NULL){
 		location->nextwait=new people;
 
 		location->nextwait->flightcode=code;//gotta check if exists !!!
@@ -76,20 +79,36 @@ void line::add(string name,string last,int code){//if somebody exists
 		}
 	}
 
-people *line::search(string name, string last,people *location){
+people *line::search(string name, string last,int key,people *location){
 	if (location!=NULL){
-		if ((name==location->name)&&(name==location->last)){
+		if ((name==location->name)&&(last==location->last)&&(key==location->flightcode)){
 			
 			return location;
 			}
 		else{
-			search(name,last,location->nextwait);
+			search(name,last,key,location->nextwait);
 		}
-		}}
-
-people *line::search(string name,string last){
-	return search(name,last,start);//stelnei sto search
+	}else{
+	return NULL;	
+	}
+}
+people *line::previous(string name, string last,int key,people *location){
+	if ((location!=0)&&(location->nextwait!=0)){
+		if ((name==location->nextwait->name)&&(last==location->nextwait->last)){
+			
+			return location;
+			}
+		else{
+			search(name,last,key,location->nextwait);
+		}
+	}else{
+		return NULL;
+		}
+}
+people *line::search(string name,string last,int key){
+	return search(name,last,key,start);//stelnei sto search
 	}
 int line::printcode(people *location){
 	return location->flightcode;
 	}
+

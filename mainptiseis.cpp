@@ -1,94 +1,78 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 using namespace std;
-class flight {
+struct node{
+int key,cost,seats,rseats;
+node *left;
+node *right;
+    struct time{
+        int hours;
+        int minutes;
+    }start,reach;
+char from[3],to[3];
+};//Για τις πτησεις
 
-private://same as main
+struct line{
+		string frist,last;
+		int key;
+		line *next;
+};//Για την ουρα
 
-int fcode,cost,seats,rseats;
-//  fcode = Flight code cost = ticket cost
-//  seats = all seats , rseats = reserved seats
-struct time {
-								int hours;
-								int minutes;
-} start,reach;
-char from[2],to[2];
-public:
-int add(){
-
-								return 0;
-}  //function to add new flights
+class btreeandline{
+    public:
+        btreeandline();
+        node *search(int key);
+        node *previous(int key);
+        void addflight(int key);
+        void loudsearch(int key);
+        void deleteflight(int key);
+        int  freeseats(int key);
+        bool isleaf(int key);
+        void reserved(int key , int a);//Το a μπορει να ειναι 1 η -1 αναλογα με το τι κανουμε
 
 
-flight(int a, char b[],char c[],int d, int e,int dd,int ee, int f,int g, int h){
-								//so many things up but dont mind it works lol
-								fcode=a;
-								for (int i=0; i<=2; i++) {//repeat to load all word
-																from[i]=b[i];
-																to[i]=c[i];
-								}
-								start.hours=d;
-								start.minutes=e;
-								reach.hours=dd;
-								reach.minutes=ee;
-								cost=f;
-								seats=g;
-								rseats=h;
-								fstream base;//seting a var in/output file basi.txt
-								base.open("basi.txt",fstream::app);
-								cout<<"Opening databese..."<<endl;
-								//somewhere here should be a search for the FROM airport to sort the database
-								base <<fcode<<"|";
-								for (int i=0; i<2; i++) {//to pase the full word
-																base << from[i];
-								}
-								base <<"|";
-
-								for (int i=0; i<2; i++) {//to pase the full word
-																base << to[i];
-								}
-								base << "|"<<start.hours<<":"<<start.minutes<<"|"<<reach.hours<<":"<<reach.minutes<<","<<endl;
-								cout<<"New flight added";
-} //constractor for select=='A' (add flights)
-
+        void addqueue(int key,string first,string last);
+        void removequeue(int key,string first, string last);
+        void removeall(int key);
+        ~btreeandline();
+    private:
+        node *root;
+        node *search(int key,node *leaf);
+        node *previous(int key,node *leaf);
+        void addfight(int key, node *leaf);
+        void loudsearch(int key,node *leaf);
+        void deleteflight(node *leaf);
+        //tbc
+		line *start;
 };
 
-int main(){
 
-								int fcode,cost,seats,rseats;
-//  fcode = Flight code cost = ticket cost
-//  seats = all seats , rseats = reserved seats
-								struct time {
-																int hours;
-																int minutes;
-								} start,reach;
-//for the time to separate minutes from hours and do math with them
-								char from[2],to[2];
-								char select;//selection manager
-								cout<<"Do you want to add(A) remove(B) flights, make (C) or cancel(D) a reservation?";
-								cin>>select;
-								if (select=='A') {
-																//puting stuff in var
-																cout<<"Give the following (required)"<<endl;
-																cout<<"Flight Code : ";
-																cin>>fcode;
-																cout<<"From : ";
-																cin>>from;
-																cout<<"To : ";
-																cin>>to;
-																cout<<"Start time (Hours minutes separated with space) : "; // with space , i cant figure out another method atm '-.-
-																cin>>start.hours>>start.minutes;
-																cout<<"Reach time (Hours minutes separated with space) : ";
-																cin>>reach.hours>>reach.minutes;//need to put everywhere , check for values lengh ;p
-																//we have to put more variables and fill the 0 below
-																cout<<"Ticket Cost : ";
-																cin>>cost;
-																cout<<"All seats  : ";
-																cin>>seats;
-																cout<<"Reserved seats : ";
-																cin>>rseats;
-																flight(fcode,from,to,start.hours,start.minutes,reach.hours,reach.minutes,cost,seats,rseats);
-								}
-								return 0;
+btreeandline::btreeandline(){
+	root=NULL;
+	start=NULL;
+}
+//LINE
+//NODE
+void btreeandline::addflight(int key){//PUBLIC
+	if (root==NULL){
+		root=new node;
+		root->key=key;
+		cin>>root->cost;
+		cin>>root->seats;
+		cin>>root->rseats;
+		root->left=NULL;
+		root->right=NULL;
+		cin>>root->start.hours;
+		cin>>root->start.minutes;
+		cin>>root->reach.hours;
+		cin>>root->reach.minutes;
+		cin>>root->from[3];
+		cin>>root->to[3];
+	}
+	else{
+	addflight(key,root)
+	}
+}
+
+void btreeandline::addflight(int key,node *leaf){
 }
