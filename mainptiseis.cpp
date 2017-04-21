@@ -34,7 +34,6 @@ class btreeandline{
         void addqueue(int key,string first,string last);
         void removequeue(int key,string first, string last);
         void removeall(int key);
-        ~btreeandline();
     private:
         node *root;
         node *search(int key,node *leaf);
@@ -57,23 +56,81 @@ void btreeandline::addflight(int key){//PUBLIC
 	if (root==NULL){
 		root=new node;
 		root->key=key;
+		cout<<"GIVE COST: ";
 		cin>>root->cost;
-		cin>>root->seats;
-		cin>>root->rseats;
+		//ta vazw ola se comments gia na kanw pio grigoro debuging
+		//cout<<"GIVE SEATS: ";
+		//cin>>root->seats;
+		//cout<<"GIVE RESERVED SEATS: ";
+		//cin>>root->rseats;
 		root->left=NULL;
 		root->right=NULL;
-		cin>>root->start.hours;
-		cin>>root->start.minutes;
-		cin>>root->reach.hours;
-		cin>>root->reach.minutes;
-		cin>>root->from[3];
-		cin>>root->to[3];
+		//cout<<"GIVE FLIGHT TIME: ";
+		//cin>>root->start.hours;
+		//cin>>root->start.minutes;
+		//cout<<"GIVE LAND TIME: ";
+		//cin>>root->reach.hours;
+		//cin>>root->reach.minutes;
+		//cout<<"GIVE STARTING LOCATION: ";
+		//cin>>root->from[3];
+		//cout<<"GIVE ARRIVAL LOCATION: ";
+		//cin>>root->to[3];
 	}
 	else{
 	addflight(key,root);
 	}
 }
 
-void btreeandline::addflight(int key,node *leaf){
-	
+void btreeandline::addflight(int key,node *leaf){//PRIVATE
+	if (leaf!=NULL){
+		if (key>leaf->key){
+			addflight(key,leaf->right);
+		}
+		else if (key<leaf->key){
+			addflight(key,leaf->left);
+		}
+		else{
+			cout<<"THIS FLIGHTCODE ALREADY EXISTS";
+		}
+	}
+	else{
+		leaf=new node;
+		leaf->key=key;
+		cout<<"GIVE COST: ";
+		cin>>leaf->cost;
+		cout<<"GIVE SEATS: ";
+		cin>>leaf->seats;
+		cout<<"GIVE RESERVED SEATS: ";
+		cin>>root->rseats;
+		leaf->left=NULL;
+		leaf->right=NULL;
+		cout<<"GIVE FLIGHT TIME: ";
+		cin>>leaf->start.hours;
+		cin>>leaf->start.minutes;
+		cout<<"GIVE LAND TIME: ";
+		cin>>leaf->reach.hours;
+		cin>>leaf->reach.minutes;
+		cout<<"GIVE STARTING LOCATION: ";
+		cin>>leaf->from[3];
+		cout<<"GIVE ARRIVAL LOCATION: ";		
+		cin>>leaf->to[3];
+	}
+}
+
+
+
+
+int main(){
+	btreeandline a;
+	char S;
+	int key;
+	cout<<"SELECT :"<<endl;
+	cout<<"A FOR ADD FLIGHT"<<endl;
+	cin>>S;
+	if (S=='A'){
+	cout<<"GIVE FLIGHTCODE: ";
+	cin>>key;
+	a.addflight(key);
+	}
+	return 0;
 }
