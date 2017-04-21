@@ -9,7 +9,7 @@ node *right;
         int hours;
         int minutes;
     }start,reach;
-char from[3],to[3];
+char from[4],to[4];
 };//Για τις πτησεις
 
 struct line{
@@ -58,23 +58,22 @@ void btreeandline::addflight(int key){//PUBLIC
 		root->key=key;
 		cout<<"GIVE COST: ";
 		cin>>root->cost;
-		//ta vazw ola se comments gia na kanw pio grigoro debuging
-		//cout<<"GIVE SEATS: ";
-		//cin>>root->seats;
-		//cout<<"GIVE RESERVED SEATS: ";
-		//cin>>root->rseats;
+		cout<<"GIVE SEATS: ";
+		cin>>root->seats;
+		cout<<"GIVE RESERVED SEATS: ";
+		cin>>root->rseats;
 		root->left=NULL;
 		root->right=NULL;
-		//cout<<"GIVE FLIGHT TIME: ";
-		//cin>>root->start.hours;
-		//cin>>root->start.minutes;
-		//cout<<"GIVE LAND TIME: ";
-		//cin>>root->reach.hours;
-		//cin>>root->reach.minutes;
-		//cout<<"GIVE STARTING LOCATION: ";
-		//cin>>root->from[3];
-		//cout<<"GIVE ARRIVAL LOCATION: ";
-		//cin>>root->to[3];
+		cout<<"GIVE FLIGHT TIME: ";
+		cin>>root->start.hours;
+		cin>>root->start.minutes;
+		cout<<"GIVE LAND TIME: ";
+		cin>>root->reach.hours;
+		cin>>root->reach.minutes;
+		cout<<"GIVE STARTING LOCATION: ";
+		cin>>root->from;
+		cout<<"GIVE ARRIVAL LOCATION: ";
+		cin>>root->to;
 	}
 	else{
 	addflight(key,root);
@@ -90,7 +89,7 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 			addflight(key,leaf->left);
 		}
 		else{
-			cout<<"THIS FLIGHTCODE ALREADY EXISTS";
+			cout<<"THIS FLIGHTCODE ALREADY EXISTS"<<endl;
 		}
 	}
 	else{
@@ -111,9 +110,9 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 		cin>>leaf->reach.hours;
 		cin>>leaf->reach.minutes;
 		cout<<"GIVE STARTING LOCATION: ";
-		cin>>leaf->from[3];
+		cin>>leaf->from;
 		cout<<"GIVE ARRIVAL LOCATION: ";		
-		cin>>leaf->to[3];
+		cin>>leaf->to;
 	}
 }
 
@@ -124,13 +123,20 @@ int main(){
 	btreeandline a;
 	char S;
 	int key;
+
 	cout<<"SELECT :"<<endl;
 	cout<<"A FOR ADD FLIGHT"<<endl;
+	cout<<"X TO QUIT"<<endl;
 	cin>>S;
-	if (S=='A'){
-	cout<<"GIVE FLIGHTCODE: ";
-	cin>>key;
-	a.addflight(key);
+	while(S!='X'){
+		if (S=='A'){
+		cout<<"GIVE FLIGHTCODE: ";
+		cin>>key;
+		a.addflight(key);
+		}
+
+		cout<<"SELECT :"<<endl;
+		cin>>S;
 	}
 	return 0;
 }
