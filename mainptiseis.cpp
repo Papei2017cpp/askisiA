@@ -239,9 +239,10 @@ void btreeandline::reserved(int key,int a){//PUBLIC
 	reserved(key,a,search(key));
 }
 void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
+	cout<<freeseats(key);//DEBUGGING
 	if (freeseats(key)>0){
 		leaf->rseats+=a*1;
-		if ((a=-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){//den uparxei akoma tpt sto firstonline
+		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){//den uparxei akoma tpt sto firstonline
 			line *leaf=searchkey(key);
 			if (leaf==start){
 			delete start;	
@@ -273,7 +274,7 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
 			addqueue(key,firstname,lastname);
 		}
 		else if ((start==NULL)&&(a==-1)){
-			cout<<"There are no reservations in queue"<<endl;
+			cout<<"There are no reservations in queue"<<endl;//gia kapoio legit periergo logo emfanizei afto lol
 		}
 		else if ((start!=NULL)&&(a==-1)){
 			string first,last;
@@ -400,7 +401,17 @@ line *btreeandline::previousqueue(int key,string first,string last,line *leaf){
 
 
 void btreeandline::removeall(int key){
-	//search key first and then remove every single one with tha same key
+	if (searchkey(key)!=NULL){
+		if (previousqueue(key,searchkey(key)->first,searchkey(key)->last,start)!=NULL){
+			line *leaf=searchkey(key);
+			line *previousleaf=previousqueue(key,searchkey(key)->first,searchkey(key)->last,start);
+			previousleaf->next=leaf->next;
+			removeall(key);
+		}
+		else{
+			delete searchkey(key);
+		}
+	}
 }
 
 
@@ -434,7 +445,8 @@ int main(){
 			a.loudsearch(key);
 		}
 		else if (S=='C'){
-
+			cout<<"GIVE FLIGHTCODE";
+			cin>>key;
 			a.reserved(key,-1);//do this twice if freeseats are empty and delete the first on line
 		}
 		cout<<"SELECT :"<<endl;
