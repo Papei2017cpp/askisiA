@@ -35,8 +35,8 @@ class btreeandline{
         void addqueue(int key,string first,string last);
         void removequeue(int key,string first, string last);
         void removeall(int key);
-		line *searchqueue(int key,string first,string last);
-		line *searchkey(int key);
+		line *searchqueue(int key,string first,string last);//vriskei thesi enos sigekrimenou
+		line *searchkey(int key);//vriskei to prwto prwto me ton arithmo afto
 
 
 
@@ -200,15 +200,23 @@ void btreeandline::loudsearch(int key){//PUBLIC
 }
 void btreeandline::loudsearch(int key,node *leaf){//PRIVATE
 	if (leaf!=NULL){
-		cout<<"FLIGHT DETAILS"<<endl;
-		cout<<"CODE :"<<leaf->key<<endl;
-		cout<<"COST:"<<leaf->cost<<endl;
-		cout<<"SEATS :"<<leaf->seats<<endl;
-		cout<<"RESERVED SEATS :"<<leaf->rseats<<endl;
-		cout<<"FLGHT TIME :"<<leaf->start.hours<<":"<<leaf->start.minutes<<endl;
-		cout<<"LAND TIME :"<<leaf->reach.hours<<":"<<leaf->reach.minutes<<endl;
-		cout<<"FROM :"<<leaf->from<<endl;
-		cout<<"TO :"<<leaf->to<<endl;
+		if (key==leaf->key){
+			cout<<"FLIGHT DETAILS"<<endl;
+			cout<<"CODE :"<<leaf->key<<endl;
+			cout<<"COST:"<<leaf->cost<<endl;
+			cout<<"SEATS :"<<leaf->seats<<endl;
+			cout<<"RESERVED SEATS :"<<leaf->rseats<<endl;
+			cout<<"FLGHT TIME :"<<leaf->start.hours<<":"<<leaf->start.minutes<<endl;
+			cout<<"LAND TIME :"<<leaf->reach.hours<<":"<<leaf->reach.minutes<<endl;
+			cout<<"FROM :"<<leaf->from<<endl;
+			cout<<"TO :"<<leaf->to<<endl;
+		}
+		else if (key>leaf->key){
+			loudsearch(key,leaf->right);
+		}
+		else if (key<leaf->key){
+			loudsearch(key,leaf->left);
+		}
 	}
 
 }
@@ -346,6 +354,8 @@ void btreeandline::addqueue(int key,string first,string last,line *leaf){
 
 
 
+
+
 line *btreeandline::searchkey(int key){
 	if (start!=NULL){
 		searchkey(key,start);
@@ -368,7 +378,6 @@ line*btreeandline::searchkey(int key,line *leaf){
 	}		
 	
 }
-
 
 
 
@@ -400,6 +409,7 @@ line *btreeandline::previousqueue(int key,string first,string last,line *leaf){
 }
 
 
+
 void btreeandline::removeall(int key){
 	if (searchkey(key)!=NULL){
 		if (previousqueue(key,searchkey(key)->first,searchkey(key)->last,start)!=NULL){
@@ -415,6 +425,19 @@ void btreeandline::removeall(int key){
 }
 
 
+
+
+void btreeandline::deleteflight(int key){
+	if (search(key)!=NULL){
+		removeall(key);
+		delete search(key);
+		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
+	}
+}
+
+
+
+
 int main(){
 	btreeandline a;
 	char S;
@@ -426,6 +449,7 @@ int main(){
 	cout<<"S TO SEARCH FLIGHT"<<endl;
 	cout<<"R TO RESERVE A SEAT OR ADD TO QUEUE"<<endl;
 	cout<<"C TO CANCEL A RESERVATION OR QUIT QUEUE"<<endl;
+	cout<<"D TO DELETE A FLIGHT"<<endl;
 	cout<<"X TO QUIT"<<endl;
 	cin>>S;
 	while(S!='X'){
@@ -448,6 +472,11 @@ int main(){
 			cout<<"GIVE FLIGHTCODE";
 			cin>>key;
 			a.reserved(key,-1);//do this twice if freeseats are empty and delete the first on line
+		}
+		else if (S=='D'){
+			cout<<"GIVE FLIGHTCODE";
+			cin>>key;
+			a.deleteflight(key);
 		}
 		cout<<"SELECT :"<<endl;
 		cin>>S;
