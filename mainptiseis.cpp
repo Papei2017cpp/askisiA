@@ -491,6 +491,7 @@ int main(){
 		if (S=='A'){
 			cout<<"GIVE FLIGHTCODE : ";
 			cin>>key;
+			cin.ignore();
 			a.addflight(key);
 		}
 		else if (S=='R'){
