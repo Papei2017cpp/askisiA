@@ -42,3 +42,11 @@ D300
 GIVE FLIGHTCODETHE FLIGHTHAS BEEN DELETED 
 ```
 but no problem there, the problem is when i type D400 so maybe the Search functionality is broken
+#### so we call it
+### BUG NO 2
+
+
+#### If we type R and we give all the flightcode and the name 'p' and 
+last name 'o' we can add a reservation and so on..
+but i we try to delete the 'p'  'o' we got the fantastic :
+### BUG NO 3
