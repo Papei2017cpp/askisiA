@@ -404,20 +404,15 @@ line*btreeandline::searchkey(int key,line *leaf){
 
 
 void btreeandline::removequeue(int key,string first,string last){
-	line *leaf=previousqueue(key,first,last,start);
-	cout<<"111111"<<endl;//debugging
-	line *tobedel=searchqueue(key,first,last);
-	cout<<"222222"<<endl;//debugging
-	transportnext(leaf,tobedel);
+	transportnext(previousqueue(key,first,last,start),searchqueue(key,first,last));
 
 }
 
 
 
 void btreeandline::transportnext(line *leaf,line *tobedel){
-	cout<<leaf->next<<endl;
-	cout<<tobedel<<endl;
-	//metafora tou leaf->next sto tobedel->next (anapoda lol)
+	leaf->next=tobedel->next;
+	delete tobedel;
 }
 
 
