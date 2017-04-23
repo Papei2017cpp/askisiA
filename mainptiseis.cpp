@@ -295,9 +295,9 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
 		else if ((start!=NULL)&&(a==1)){
 			cout<<"You are about to be added in queue"<<endl;
 			string lastname,firstname;
-			cout<<"GIVE FIRST NAME"<<endl;
+			cout<<"GIVE FIRST NAME :"<<endl;
 			cin>>firstname;
-			cout<<"GIVE LAST NAME"<<endl;
+			cout<<"GIVE LAST NAME :"<<endl;
 			cin>>lastname;
 			addqueue(key,firstname,lastname);
 		}
@@ -329,6 +329,7 @@ line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 	if (leaf!=NULL){
 		if ((key==leaf->key)&&(first==leaf->first)&&(last==leaf->last)){
 			return leaf;
+			cout<<leaf<<endl;//debuging
 		}
 		else{
 			return searchqueue(key,first,last,leaf->next);
@@ -405,14 +406,23 @@ line*btreeandline::searchkey(int key,line *leaf){
 
 void btreeandline::removequeue(int key,string first,string last){
 	transportnext(previousqueue(key,first,last,start),searchqueue(key,first,last));
-
+	
 }
 
 
 
 void btreeandline::transportnext(line *leaf,line *tobedel){
-	leaf->next=tobedel->next;
-	delete tobedel;
+	if (tobedel!=0){
+		cout<<leaf<<endl;//debuging
+		cout<<tobedel<<endl;//debuging
+		if (leaf!=0){
+			leaf->next=tobedel->next;
+		}
+		delete tobedel;
+		cout<<"YOU HAVE BEEN REMOVED FROM THE QUEUE"<<endl;
+	}else{
+		cout<<"YOU ARE NOT IN THIS QUEUE"<<endl;
+	}
 }
 
 
