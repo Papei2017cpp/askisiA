@@ -465,7 +465,7 @@ void btreeandline::removeall(int key){
 void btreeandline::deleteflight(int key){
 	if (search(key)!=NULL){
 		removeall(key);
-		delete search(key);//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω 
+		delete search(key);//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
 	}
 }
