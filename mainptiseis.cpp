@@ -145,7 +145,7 @@ void btreeandline::forceadd(int key, node *leaf){
 	cout<<"GIVE SEATS: ";
 	cin>>leaf->seats;
 	cout<<"GIVE RESERVED SEATS: ";
-	cin>>root->rseats;
+	cin>>leaf->rseats;
 	leaf->left=NULL;
 	leaf->right=NULL;
 	cout<<"GIVE FLIGHT TIME: ";
@@ -160,7 +160,7 @@ void btreeandline::forceadd(int key, node *leaf){
 	cin>>leaf->to;
 
 	//debuging
-	cout<<leaf<<endl;
+	cout<<leaf<<"163"<<endl;
 }
 
 
@@ -271,7 +271,7 @@ void btreeandline::reserved(int key,int a){//PUBLIC
 	reserved(key,a,search(key));
 }
 void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
-	cout<<freeseats(key);//DEBUGGING
+	cout<<freeseats(key)<<"274";//DEBUGGING
 	if (freeseats(key)>0){
 		leaf->rseats+=a*1;
 		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){//den uparxei akoma tpt sto firstonline
@@ -333,14 +333,16 @@ line *btreeandline::searchqueue(int key,string first,string last){
 line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 	if (leaf!=NULL){
 		if ((key==leaf->key)&&(first==leaf->first)&&(last==leaf->last)){
-            cout<<leaf<<endl;//debuging
+            cout<<leaf<<"336"<<endl;//debuging
             return leaf;
 		}
-		else{
+		else if ((key!=leaf->key)&&(first!=leaf->first)&&(last!=leaf->last)) {
 			return searchqueue(key,first,last,leaf->next);
+
 		}
 	}
 	else{
+		cout<<"345"<<endl;//debuging
 		return NULL;
 	}
 }
@@ -353,7 +355,8 @@ line *btreeandline::lastonline(line *leaf){
 	return lastonline(leaf->next);
 	}
 	else{
-	return leaf->next;	
+	cout<<leaf<<"358"<<endl;
+	return leaf;
 	}
 }
 
@@ -362,19 +365,19 @@ line *btreeandline::lastonline(line *leaf){
 
 
 void btreeandline::addqueue(int key,string first,string last){
-	if (searchqueue(key,first,last)==NULL){
-		addqueue(key,first,last,lastonline(start));
+	if (searchqueue(key,first,last)!=NULL){
+		cout<<"YOU ARE ALREADY ON QUEUE"<<endl;
 	}
 	else{
-		cout<<"YOU ARE ALREADY ON QUEUE"<<endl;
+		addqueue(key,first,last,lastonline(start));
 	}
 }
 void btreeandline::addqueue(int key,string first,string last,line *leaf){
-	leaf= new line;
-	leaf->key=key;
-	leaf->first=first;
-	leaf->last=last;
-	leaf->next=NULL;
+	leaf->next = new line;
+	leaf->next->key=key;
+	leaf->next->first=first;
+	leaf->next->last=last;
+	leaf->next->next=NULL;
 }
 
 
@@ -470,7 +473,12 @@ void btreeandline::removeall(int key){
 void btreeandline::deleteflight(int key){
 	if (search(key)!=NULL){
 		removeall(key);
-		delete search(key);//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω
+		node *leaf = search(key);
+		if (leaf==root) {
+			delete leaf;
+			leaf = NULL;
+		}
+		//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
 	}
 }
@@ -506,7 +514,6 @@ int main(){
 		else if (S=='S'){
 			cout<<"GIVE FLIGHTCODE :";
 			cin>>key;
-			cout<<key<<endl;
 			a.loudsearch(key);
 		}
 		else if (S=='C'){
