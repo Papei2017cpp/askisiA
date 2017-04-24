@@ -48,8 +48,7 @@ class btreeandline{
         void addflight(int key, node *leaf);
         void loudsearch(int key,node *leaf);
 		void forceadd(int key,node *leaf);
-        void deleteflight(node *leaf);
-        int  freeseats(int key,node *leaf);
+        int  freeseats(node *leaf);
         void reserved(int key , int a,node *leaf);
         bool isleaf(int key,node *leaf);
         void addqueue(int key,string first,string last,line *leaf);
@@ -76,7 +75,7 @@ btreeandline::btreeandline(){
 
 void btreeandline::addflight(int key){//PUBLIC
 	if (root!=NULL){
-		addflight(key,root);	
+		addflight(key,root);
 	}
 	else{
 		root=new node;
@@ -104,24 +103,31 @@ void btreeandline::addflight(int key){//PUBLIC
 }
 void btreeandline::addflight(int key,node *leaf){//PRIVATE
 	if (key>leaf->key){
-		if (leaf->right!=NULL){
+		if ((leaf->right!=NULL)&&(leaf->left->key!=key)){
+            cout<<"RIGHT"<<endl;
 			addflight(key,leaf->right);
 			//debuging
-			cout<<"RIGHT"<<endl;
+
 		}
 		else{
+            leaf->right=new node;
 			forceadd(key,leaf->right);
-		}
+            cout<<"NEW FLIGHTCODE ADDED"<<endl;
+        }
+
 	}
 	else if (key<leaf->key){
-		if (leaf->left!=NULL){
+		if ((leaf->left!=NULL)&&(leaf->left->key!=key)){
+            cout<<"LEFT"<<endl;
 			addflight(key,leaf->left);
 			//debuging
-			cout<<"LEFT"<<endl;
+
 		}
 		else{
+            leaf->left=new node;
 			forceadd(key,leaf->left);
-		}
+            cout<<"NEW FLIGHTCODE ADDED"<<endl;
+        }
 	}
 	else{
 		cout<<"THIS FLIGHTCODE ALREADY EXISTS"<<endl;
@@ -132,7 +138,7 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 
 
 void btreeandline::forceadd(int key, node *leaf){
-	leaf=new node;
+
 	leaf->key=key;
 	cout<<"GIVE COST: ";
 	cin>>leaf->cost;
@@ -152,10 +158,9 @@ void btreeandline::forceadd(int key, node *leaf){
 	cin>>leaf->from;
 	cout<<"GIVE ARRIVAL LOCATION: ";		
 	cin>>leaf->to;
-	cout<<"NEW FLIGHTCODE ADDED"<<endl;	
+
 	//debuging
 	cout<<leaf<<endl;
-	cout<<leaf->key<<endl;
 }
 
 
@@ -205,10 +210,10 @@ node *btreeandline::previous(int key, node *leaf){//PRIVATE
 			return leaf;
 		}
 		else if (key>leaf->key){
-			search(key,leaf->right);
+			return search(key,leaf->right);
 		}
 		else if (key<leaf->key){
-			search(key,leaf->left);
+			return search(key,leaf->left);
 		}	
 	}
 	else{
@@ -243,9 +248,9 @@ void btreeandline::loudsearch(int key,node *leaf){//PRIVATE
 
 
 int btreeandline::freeseats(int key){//PUBLIC
-	return freeseats(key,search(key));
+	return freeseats(search(key));
 }
-int btreeandline::freeseats(int key,node *leaf){//PUBLIC
+int btreeandline::freeseats(node *leaf){//PUBLIC
 	return ((leaf->seats)-(leaf->rseats));	
 }
 
@@ -328,8 +333,8 @@ line *btreeandline::searchqueue(int key,string first,string last){
 line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 	if (leaf!=NULL){
 		if ((key==leaf->key)&&(first==leaf->first)&&(last==leaf->last)){
-			return leaf;
-			cout<<leaf<<endl;//debuging
+            cout<<leaf<<endl;//debuging
+            return leaf;
 		}
 		else{
 			return searchqueue(key,first,last,leaf->next);
