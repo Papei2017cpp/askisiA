@@ -303,7 +303,7 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
 		}
 		else if ((start==NULL)&&(a==-1)){
 			cout<<"There are no reservations in queue"<<endl;//gia kapoio legit periergo logo emfanizei afto lol
-		}
+		}//θελει ενα if αν θες να βσησεις ατομα απο rseats
 		else if ((start!=NULL)&&(a==-1)){
 			string first,last;
 			cout<<"GIVE FIRST NAME";
@@ -313,7 +313,7 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
 			removequeue(key,first,last);
 		}
 	}
-}
+}//αν θελεις να σβησεις καποιον εκτως ουρασ δεν μπορεις (αν γεμησει τα rseats)
 
 
 
@@ -465,7 +465,7 @@ void btreeandline::removeall(int key){
 void btreeandline::deleteflight(int key){
 	if (search(key)!=NULL){
 		removeall(key);
-		delete search(key);
+		delete search(key);//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω 
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
 	}
 }

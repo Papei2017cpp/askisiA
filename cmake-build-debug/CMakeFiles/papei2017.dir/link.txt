@@ -1,0 +1,1 @@
+/usr/bin/c++   -g   CMakeFiles/papei2017.dir/mainptiseis.cpp.o  -o papei2017 
