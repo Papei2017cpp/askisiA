@@ -271,13 +271,13 @@ void btreeandline::reserved(int key,int a){//PUBLIC
 	reserved(key,a,search(key));
 }
 void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
-	cout<<freeseats(key)<<"274";//DEBUGGING
+	cout<<freeseats(key)<<" 274 ";//DEBUGGING
 	if (freeseats(key)>0){
 		leaf->rseats+=a*1;
 		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){//den uparxei akoma tpt sto firstonline
 			line *leaf=searchkey(key);
 			if (leaf==start){
-			delete start;	
+			    delete start;
 			}else{
 				if (previousqueue(key,leaf->first,leaf->last,start)!=NULL){
 					line *tobedeleted=previousqueue(key,leaf->first,leaf->last,start);
@@ -307,7 +307,7 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
 			addqueue(key,firstname,lastname);
 		}
 		else if ((start==NULL)&&(a==-1)){
-			cout<<"There are no reservations in queue"<<endl;//gia kapoio legit periergo logo emfanizei afto lol
+			cout<<"There are no reservations in queue"<<endl;
 		}//θελει ενα if αν θες να βσησεις ατομα απο rseats
 		else if ((start!=NULL)&&(a==-1)){
 			string first,last;
@@ -327,22 +327,23 @@ line *btreeandline::searchqueue(int key,string first,string last){
 	if (start!=NULL){
 		return searchqueue(key,first,last,start);
 	}else{
+        cout<<"NO QUEUE"<<endl;
 		return NULL;
 	}
 }
 line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 	if (leaf!=NULL){
 		if ((key==leaf->key)&&(first==leaf->first)&&(last==leaf->last)){
-            cout<<leaf<<"336"<<endl;//debuging
+            cout<<leaf<<" 336 "<<endl;//debuging
             return leaf;
 		}
-		else if ((key!=leaf->key)&&(first!=leaf->first)&&(last!=leaf->last)) {
+		else {
 			return searchqueue(key,first,last,leaf->next);
 
 		}
 	}
 	else{
-		cout<<"345"<<endl;//debuging
+		cout<<" 345 "<<endl;//debuging
 		return NULL;
 	}
 }
@@ -350,12 +351,12 @@ line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 
 
 
-line *btreeandline::lastonline(line *leaf){
+line *btreeandline::lastonline(line *leaf){//KOKO
 	if (leaf->next!=NULL){
 	return lastonline(leaf->next);
 	}
 	else{
-	cout<<leaf<<"358"<<endl;
+	cout<<leaf<<" 358 "<<endl;
 	return leaf;
 	}
 }
@@ -369,6 +370,7 @@ void btreeandline::addqueue(int key,string first,string last){
 		cout<<"YOU ARE ALREADY ON QUEUE"<<endl;
 	}
 	else{
+        cout<<"START :"<<start<<endl;
 		addqueue(key,first,last,lastonline(start));
 	}
 }
@@ -413,17 +415,19 @@ line*btreeandline::searchkey(int key,line *leaf){
 
 
 void btreeandline::removequeue(int key,string first,string last){
-	transportnext(previousqueue(key,first,last,start),searchqueue(key,first,last));
+    cout<<"PREVIOUS "<<previousqueue(key,first,last,start)<<" 417 "<<endl;
+    cout<<"THIS "<<searchqueue(key,first,last)<<" 418 "<<endl;
+	transportnext(previousqueue(key,first,last,start),searchqueue(key,first,last));//to search queue xalaei ta pada
 	
 }
 
 
 
 void btreeandline::transportnext(line *leaf,line *tobedel){
-	if (tobedel!=0){
+	if (tobedel!=NULL){
 		cout<<leaf<<endl;//debuging
 		cout<<tobedel<<endl;//debuging
-		if (leaf!=0){
+		if (leaf!=NULL){
 			leaf->next=tobedel->next;
 		}
 		delete tobedel;
