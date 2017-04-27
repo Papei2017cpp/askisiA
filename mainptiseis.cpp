@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 struct node{
-int key,cost,seats,rseats;
+int key,cost,seats,rseats;//rseats = reserved seats
 node *left;
 node *right;
     struct time{
@@ -22,26 +22,26 @@ class btreeandline{
     public:
         btreeandline();
 		//TREE
-        node *search(int key);
-        node *previous(int key);
-        void addflight(int key);
-        void loudsearch(int key);
-        void deleteflight(int key);
-        int  freeseats(int key);
-        bool isleaf(int key);
+        node *search(int key);//Διαδικασια αναζητησης πτησης
+        node *previous(int key);//Διαδικασια ευρεσης της προηγουμενης πτησης (στο δενδρο , για να κανουμε διαγραφη) TO BE COMPLETED
+        void addflight(int key);//Διαδικασια προσθεσης νεας πτησης
+        void loudsearch(int key);//Εμφανηση αποτελεσματος αναζητησης
+        void deleteflight(int key);//Διαγραφη πτησης και ανασυναρμολογηση δενδρου TO BE CREATED
+        int  freeseats(int key);//Ελεγχος για ελευθερες θεσεις
+        bool isleaf(int key);//Ελεγχος δενδρου αν υπαρχουν παιδια του κομβου 
         void reserved(int key , int a);//Το a μπορει να ειναι 1 η -1 αναλογα με το τι κανουμε
-
+		
 		//LINE
-        void addqueue(int key,string first,string last);
-        void removequeue(int key,string first, string last);
-        void removeall(int key);
-		line *searchqueue(int key,string first,string last);//vriskei thesi enos sigekrimenou
-		line *searchkey(int key);//vriskei to prwto prwto me ton arithmo afto
+        void addqueue(int key,string first,string last);//Προσθηκη νεου ατομου στην λιστα
+        void removequeue(int key,string first, string last);//Διαγραφη ατομου απο λιστα
+        void removeall(int key);//Διαγραφη ολων απο την λιστα
+		line *searchqueue(int key,string first,string last);//Βρεισκει την θεση ενος συγκεκριμενου ατομου στην λιστα
+		line *searchkey(int key);//Βρεισκει τον προτο στην ουρα της πτησης
 
 
 
-    private:
-        node *root;
+    private://Οι παρακατω διαδικασιες ειναι ΒΟΗΘΗΤΙΚΕΣ για την υλοποιηση των απο επανω
+        node *root;//ορισμος τις ριζας
         node *search(int key,node *leaf);
         node *previous(int key,node *leaf);
         void transportnext(line *leaf, line *tobedel);
@@ -58,7 +58,7 @@ class btreeandline{
 		line *previousqueue(int key,string first,string last,line *leaf);
 		line *searchkey(int key,line *leaf);
         //tbc
-		line *start;
+		line *start;//ορισμος τις ριζας
 };
 
 
@@ -70,15 +70,15 @@ class btreeandline{
 btreeandline::btreeandline(){
 	root=NULL;
 	start=NULL;
-}
+}//Constructor για αρχικοποιηση
 
 
-void btreeandline::addflight(int key){//PUBLIC
+void btreeandline::addflight(int key){
 	if (root!=NULL){
 		addflight(key,root);
 	}
 	else{
-		root=new node;
+		root=new node;//Προσθεση της πρωτης πτησης στην ριζα
 		root->key=key;
 		cout<<"GIVE COST: ";
 		cin>>root->cost;
@@ -124,8 +124,8 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 
 		}
 		else{
-            leaf->left=new node;
-			forceadd(key,leaf->left);
+            leaf->left=new node;//Δεσμευση μνημης για την διαδικασια απο κατω
+			forceadd(key,leaf->left);//Καταχωριση
             cout<<"NEW FLIGHTCODE ADDED"<<endl;
         }
 	}
@@ -137,8 +137,7 @@ void btreeandline::addflight(int key,node *leaf){//PRIVATE
 
 
 
-void btreeandline::forceadd(int key, node *leaf){
-
+void btreeandline::forceadd(int key, node *leaf){//PRIVATE
 	leaf->key=key;
 	cout<<"GIVE COST: ";
 	cin>>leaf->cost;
@@ -158,9 +157,6 @@ void btreeandline::forceadd(int key, node *leaf){
 	cin>>leaf->from;
 	cout<<"GIVE ARRIVAL LOCATION: ";		
 	cin>>leaf->to;
-
-	//debuging
-	cout<<leaf<<"163"<<endl;
 }
 
 
@@ -191,11 +187,11 @@ node *btreeandline::search(int key, node *leaf){//PRIVATE
 	}
 	else return NULL;
 
-}//Dont care about the error created here
+}
 
 
 
-//logika einai lathos kai afto katw
+
 node *btreeandline::previous(int key){//PUBLIC
 	if (root!=NULL){
 		return search(key,root);
@@ -270,11 +266,11 @@ bool btreeandline::isleaf(int key,node *leaf){//PRIVATE
 void btreeandline::reserved(int key,int a){//PUBLIC
 	reserved(key,a,search(key));
 }
-void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE
+void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE (Βλ. τελος διαδικασιας για περιγραφη)
 	cout<<freeseats(key)<<" 274 ";//DEBUGGING
 	if (freeseats(key)>0){
-		leaf->rseats+=a*1;
-		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){//den uparxei akoma tpt sto firstonline
+		leaf->rseats+=a*1;//Δεσμευση η αφαιρεση θεσης
+		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){
 			line *leaf=searchkey(key);
 			if (leaf==start){
 			    delete start;
@@ -343,7 +339,6 @@ line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 		}
 	}
 	else{
-		cout<<" 345 "<<endl;//debuging
 		return NULL;
 	}
 }
@@ -351,7 +346,7 @@ line *btreeandline::searchqueue(int key,string first,string last,line *leaf){
 
 
 
-line *btreeandline::lastonline(line *leaf){//KOKO
+line *btreeandline::lastonline(line *leaf){
 	if (leaf->next!=NULL){
 	return lastonline(leaf->next);
 	}
@@ -523,7 +518,7 @@ int main(){
 		else if (S=='C'){
 			cout<<"GIVE FLIGHTCODE :";
 			cin>>key;
-			a.reserved(key,-1);//do this twice if freeseats are empty and delete the first on line
+			a.reserved(key,-1);
 		}
 		else if (S=='D'){
 			cout<<"GIVE FLIGHTCODE";
