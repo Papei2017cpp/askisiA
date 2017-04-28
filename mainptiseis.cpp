@@ -9,7 +9,7 @@ node *right;
         int hours;
         int minutes;
     }start,reach;
-char from[4],to[4];
+char from[3],to[3];
 };//Για τις πτησεις
 
 struct line{
@@ -23,10 +23,10 @@ class btreeandline{
         btreeandline();
 		//TREE
         node *search(int key);//Διαδικασια αναζητησης πτησης
-        node *previous(int key);//Διαδικασια ευρεσης της προηγουμενης πτησης (στο δενδρο , για να κανουμε διαγραφη) TO BE COMPLETED
+        node *previous(int key);//Διαδικασια ευρεσης της προηγουμενης πτησης (στο δενδρο , για να κανουμε διαγραφη)
         void addflight(int key);//Διαδικασια προσθεσης νεας πτησης
         void loudsearch(int key);//Εμφανηση αποτελεσματος αναζητησης
-        void deleteflight(int key);//Διαγραφη πτησης και ανασυναρμολογηση δενδρου TO BE CREATED
+        void deleteflight(int key);//Διαγραφη πτησης και ανασυναρμολογηση δενδρου TO BE FINISHED
         int  freeseats(int key);//Ελεγχος για ελευθερες θεσεις
         bool isleaf(int key);//Ελεγχος δενδρου αν υπαρχουν παιδια του κομβου 
         void reserved(int key , int a);//Το a μπορει να ειναι 1 η -1 αναλογα με το τι κανουμε
@@ -39,7 +39,6 @@ class btreeandline{
 		line *searchkey(int key);//Βρεισκει τον προτο στην ουρα της πτησης
 
 
-
     private://Οι παρακατω διαδικασιες ειναι ΒΟΗΘΗΤΙΚΕΣ για την υλοποιηση των απο επανω
         node *root;//ορισμος τις ριζας
         node *search(int key,node *leaf);
@@ -50,11 +49,11 @@ class btreeandline{
 		void forceadd(int key,node *leaf);
         int  freeseats(node *leaf);
         void reserved(int key , int a,node *leaf);
-        bool isleaf(int key,node *leaf);
+        bool isleaf(node *leaf);
         void addqueue(int key,string first,string last,line *leaf);
 		line *searchqueue(int key,string first,string last,line *leaf);
 		line *lastonline(line *leaf);
-
+        node *onlyWay(int a,node *leaf);
 		line *previousqueue(int key,string first,string last,line *leaf);
 		line *searchkey(int key,line *leaf);
         //tbc
@@ -254,9 +253,10 @@ int btreeandline::freeseats(node *leaf){//PUBLIC
 
 
 bool btreeandline::isleaf(int key){//PUBLIC
-	return isleaf(key,search(key));
+	return isleaf(search(key));
 }
-bool btreeandline::isleaf(int key,node *leaf){//PRIVATE
+bool btreeandline::isleaf(node *leaf){//PRIVATE
+    cout<<"ERROR" <<"  259"<<endl;
 	return ((leaf->left==NULL)&&(leaf->right==NULL));
 }
 
@@ -469,19 +469,100 @@ void btreeandline::removeall(int key){
 
 
 
-void btreeandline::deleteflight(int key){
+void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ ΡΙΖΑ ;;;
 	if (search(key)!=NULL){
 		removeall(key);
 		node *leaf = search(key);
-		if (leaf==root) {
-			delete leaf;
-			leaf = NULL;
+		if (isleaf(leaf)) {
+            if (previous(leaf->key)->key>leaf->key){
+                previous(leaf->key)->left=NULL;
+            }else{
+                previous(leaf->key)->right=NULL;
+            }
+            delete leaf;
 		}
-		//δεν ειναι ετσι απλο πρεπει να εννωσουμε τα παρακατω
+        else{
+            //Αν ενα απο τα υποδενδρα εχει μονο 1 υποδενδρο απο την ιδια κατεφθυνση
+            if ((leaf->left->left!=NULL)&&(leaf->left->right==NULL)){
+
+                leaf=leaf->left;
+
+            }
+            else if (((leaf->right->left==NULL)&&(leaf->right->right!=NULL))){
+
+                leaf=leaf->right;
+
+            }
+            else if (isleaf(leaf->left)){
+                cout<<"ERROR"<<" 491"<<endl;
+                leaf->left->right=leaf->right;
+                leaf=leaf->left;
+            }
+            else if (isleaf(leaf->right)){
+                cout<<"ERROR"<<" 494"<<endl;
+                leaf=leaf->right;
+            }
+            else if(leaf->left!=NULL){
+                if (isleaf(onlyWay(0,leaf))){//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
+                    onlyWay(1,leaf)->right=NULL;
+                    onlyWay(1,leaf)->left=leaf->left;
+                    leaf=onlyWay(1,leaf);
+
+                }
+                else{//αν δεν ειναι φυλλο τοτε θα εχει αριστερα πραγματα
+
+
+                }
+            }
+            else if(leaf->right!=NULL) {
+                if (isleaf(onlyWay(1, leaf))) {//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
+                    onlyWay(1,leaf)->left=NULL;
+                    onlyWay(1,leaf)->right=leaf->right;
+                    leaf=onlyWay(1,leaf);
+                } else {//αν δεν ειναι φυλλο τοτε θα εχει δεξια πραγματα
+
+
+                }
+            }
+        }
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
 	}
 }
 
+
+
+
+node *btreeandline::onlyWay(int a,node *leaf) {
+    if (a==0){
+        int max;
+        max = leaf->left->key;
+        node *that=leaf->left;
+        leaf = leaf->left;
+        while (leaf->right!=NULL){
+            if (leaf->right->key>max){
+                that=leaf->right;
+                max=leaf->right->key;
+            }
+            leaf=leaf->right;
+        }
+        return that;
+    }
+    else{
+        int min;
+        min = leaf->right->key;
+        node *that=leaf->right;
+        leaf = leaf->right;
+        while (leaf->left!=NULL){
+            if (leaf->left->key<min){
+                that=leaf->left;
+                min=leaf->left->key;
+            }
+            leaf=leaf->right;
+        }
+        return that;
+    }
+
+}
 
 
 
