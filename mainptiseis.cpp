@@ -258,7 +258,7 @@ bool btreeandline::isleaf(int key){//PUBLIC
 	return isleaf(search(key));
 }
 bool btreeandline::isleaf(node *leaf){//PRIVATE
-    cout<<"ERROR" <<"  259"<<endl;
+    cout<<"ERROR" <<"  261"<<endl;
 	return ((leaf->left==NULL)&&(leaf->right==NULL));
 }
 
@@ -471,7 +471,7 @@ void btreeandline::removeall(int key){
 
 
 
-void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ ΡΙΖΑ ;;;
+void btreeandline::deleteflight(int key){
 	if (search(key)!=NULL){
         cout<<"ERROR" <<"  474"<<endl;
 
@@ -491,66 +491,90 @@ void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ Ρ
             delete leaf;
 		}
         else{
-            cout<<"ERROR" <<"  492"<<endl;
+            cout<<"ERROR" <<"  494"<<endl;
             //Αν ενα απο τα υποδενδρα εχει μονο 1 υποδενδρο απο την ιδια κατεφθυνση
             if (leaf->left!=NULL){
-                 if ((leaf->left->left!=NULL)&&(leaf->left->right==NULL)){
+                if (isleaf(leaf->left)){
+                    cout<<"ERROR"<<" 491"<<endl;
+                    leaf->left->right=leaf->right;
+                    swapnode(leaf,leaf->left);
+                }
+                else if ((leaf->left->left!=NULL)&&(leaf->left->right==NULL)){
                     cout<<"ERROR" <<"  495"<<endl;
                     leaf=leaf->left;
 
                 }
+                else if (isleaf(onlyWay(0,leaf))){//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
+                    previous(onlyWay(0,leaf)->key)->right=NULL;
+                    if (onlyWay(0,leaf)!=leaf->right){
+                        onlyWay(0,leaf)->right=leaf->right;
+                    }
+                    else{
+                        onlyWay(0,leaf)->right=NULL;
+                    }
+                    cout<<"ERROR 510 "<<endl;
+                    onlyWay(0,leaf)->left=leaf->left;
+                    swapnode(leaf,onlyWay(0,leaf));
+
+                }
+                else{//αν δεν ειναι φυλλο τοτε θα εχει αριστερα πραγματα
+                    cout<<"ERROR" <<"  522"<<endl;
+                    previous(onlyWay(0,leaf)->key)->right=onlyWay(0,leaf)->left;
+                    cout<<"ERROR 510 "<<endl;
+                    if (onlyWay(0,leaf)!=leaf->right){
+                        onlyWay(0,leaf)->right=leaf->right;
+                    }
+                    else{
+                        onlyWay(0,leaf)->right=NULL;
+                    }
+                    cout<<"ERROR 525 "<<endl;
+                    onlyWay(0,leaf)->left=leaf->left;
+                    cout<<"ERROR 527 "<<endl;
+                    swapnode(leaf,onlyWay(0,leaf));
+                    cout<<"ERROR 529 "<<endl;
+                }
             }
             else if(leaf->right!=NULL){
-                if (((leaf->right->left==NULL)&&(leaf->right->right!=NULL))){
+                if (isleaf(leaf->right)){
+                    cout<<"ERROR"<<" 494"<<endl;
+                    leaf->right->left=leaf->left;
+                    swapnode(leaf,leaf->right);
+                }
+                else if (((leaf->right->left==NULL)&&(leaf->right->right!=NULL))){
                     cout<<"ERROR" <<"  500"<<endl;
                     leaf->right->left=leaf->left;
                     swapnode(leaf,leaf->right);
 
                 }
-            }
-            if (isleaf(leaf->left)){
-                cout<<"ERROR"<<" 491"<<endl;
-                leaf->left->right=leaf->right;  
-                swapnode(leaf,leaf->left);
-            }
-            else if (isleaf(leaf->right)){
-                cout<<"ERROR"<<" 494"<<endl;
-                leaf->right->left=leaf->left;
-                swapnode(leaf,leaf->right);
-            }//ΜΕΧΡΙ ΕΔΩ ΕΙΝΑΙ ΟΛΑ ΟΚΕΥ
-            else if(leaf->left!=NULL){
-                cout<<"ERROR" <<"  514"<<endl;
-                if (isleaf(onlyWay(0,leaf))){//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
-                    onlyWay(1,leaf)->right=NULL;
-                    onlyWay(1,leaf)->left=leaf->left;
-                    leaf=onlyWay(1,leaf);
-
-                }
-                else{//αν δεν ειναι φυλλο τοτε θα εχει αριστερα πραγματα
-                    cout<<"ERROR" <<"  522"<<endl;
-
-                }
-            }
-            else if(leaf->right!=NULL) {
-
-                if (isleaf(onlyWay(1, leaf))) {//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
+                else if (isleaf(onlyWay(1, leaf))) {//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
                     cout<<"ERROR" <<"  529"<<endl;
-                    onlyWay(1,leaf)->left=NULL;
+                    previous(onlyWay(1,leaf)->key)->left=NULL;
+                    if (onlyWay(1,leaf)!=leaf->left){
+                        onlyWay(1,leaf)->left=leaf->left;
+                    }
+                    else{
+                        onlyWay(1,leaf)->left=NULL;
+                    }
                     onlyWay(1,leaf)->right=leaf->right;
-                    leaf=onlyWay(1,leaf);
+                    swapnode(leaf,onlyWay(1,leaf));
                 }
                 else {//αν δεν ειναι φυλλο τοτε θα εχει δεξια πραγματα
                     cout<<"ERROR" <<"  535"<<endl;
-
+                    previous(onlyWay(1,leaf)->key)->left=onlyWay(1,leaf)->right;
+                    if (onlyWay(1,leaf)!=leaf->left){
+                        onlyWay(1,leaf)->left=leaf->left;
+                    }
+                    else{
+                        onlyWay(1,leaf)->left=NULL;
+                    }
+                    onlyWay(1,leaf)->right=leaf->right;
+                    swapnode(leaf,onlyWay(1,leaf));
                 }
-            }
-            else{
-                cout<<"ERROR" <<"  540"<<endl;
+                }
             }
         }
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
 	}
-}
 
 
 
