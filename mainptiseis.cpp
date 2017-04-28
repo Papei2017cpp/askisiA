@@ -14,7 +14,8 @@ char from[3],to[3];
 
 struct line{
 		string first,last;
-		int key;
+		int key,diavatirio,tilefono;
+        string address,country;
 		line *next;
 };//Για την ουρα (Τα υπολοιπα τα βαζουμε μετα)
 
@@ -52,9 +53,10 @@ class btreeandline{
         int  freeseats(node *leaf);
         void reserved(int key , int a,node *leaf);
         bool isleaf(node *leaf);
-        void addqueue(int key,string first,string last,line *leaf);
+        void addqueue(int key,string first,string last,string country,string address,int tilefono,int diavatirio,line *leaf);
 		line *searchqueue(int key,string first,string last,line *leaf);
 		line *lastonline(line *leaf);
+        void gotoline(int a,int key);
         node *onlyWay(int a,node *leaf);
 		line *previousqueue(int key,string first,string last,line *leaf);
 		line *searchkey(int key,line *leaf);
@@ -266,23 +268,35 @@ bool btreeandline::isleaf(node *leaf){//PRIVATE
 
 
 void btreeandline::reserved(int key,int a){//PUBLIC
-	reserved(key,a,search(key));
+	if (search(key)!=NULL){
+        reserved(key,a,search(key));
+    }
+    else if (a==-1){
+        cout<<"THIS CODE IS NOT AVALIABLE PLEASE SELECT ALL THE OTHER FLIGHTS TO YOUR DESTINATION '0' TO CANCEL"<<endl;
+        int key,a,nkey;
+        cout<<"GIVE FLIGHTCODE :"<<endl;
+        cin>>key;
+        if (key!=0) {
+            cout<<"GIVE FLIGHTCODE :"<<endl;
+            cin>>nkey;
+            while ((key!=0)&&(search(key)->to==search(nkey)->from)){
+                if (((search(nkey)->start.hours==search(key)->reach.hours)&&(search(nkey)->start.minutes>search(key)->reach.minutes))||
+                search(nkey)->start.hours>search(key)->reach.hours){
+                    reserved(key, a, search(key));
+                    nkey=key;
+                    cout<<"GIVE FLIGHTCODE OR PRESS '0' TO STOP :"<<endl;
+                    cin>>key;
+                }
+
+            }
+        }
+    }
 }
 void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE (Βλ. τελος διαδικασιας για περιγραφη)
 	cout<<freeseats(key)<<" 274 ";//DEBUGGING
 	if (freeseats(key)>0){
-		leaf->rseats+=a*1;//Δεσμευση η αφαιρεση θεσης
-		if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){
-			line *leaf=searchkey(key);
-			if (leaf==start){
-			    delete start;
-			}else{
-				if (previousqueue(key,leaf->first,leaf->last,start)!=NULL){
-					line *tobedeleted=previousqueue(key,leaf->first,leaf->last,start);
-					tobedeleted->next=leaf->next;//an ola afta uparxoun
-				}
-			}
-		}
+		leaf->rseats+=a;//Δεσμευση η αφαιρεση θεσης
+
 	}
 	else{
 		if ((start==NULL)&&(a==1)){
@@ -292,6 +306,14 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE (Βλ. τελο
 			cin>>start->first;
 			cout<<"GIVE LAST NAME"<<endl;
 			cin>>start->last;
+            cout<<"GIVE PASSPORT ID"<<endl;
+            cin>>start->diavatirio;
+            cout<<"GIVE PHONE NUMBER"<<endl;
+            cin>>start->tilefono;
+            cout<<"GIVE COUNTRY"<<endl;
+            cin>>start->country;
+            cout<<"GIVE ADDRESS"<<endl;
+            cin>>start->address;
 			start->key=key;
 			start->next=NULL;
 		}
@@ -306,6 +328,9 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE (Βλ. τελο
 		}
 		else if ((start==NULL)&&(a==-1)){
 			cout<<"There are no reservations in queue"<<endl;
+            leaf->rseats-=1;
+            gotoline(a,key);
+            cout<<"Removing a reservation if any"<<endl;
 		}//θελει ενα if αν θες να βσησεις ατομα απο rseats
 		else if ((start!=NULL)&&(a==-1)){
 			string first,last;
@@ -315,10 +340,28 @@ void btreeandline::reserved(int key,int a, node *leaf){//PRIVATE (Βλ. τελο
 			cin>>last;
 			removequeue(key,first,last);
 		}
+        if (freeseats(key)<0){
+            leaf->rseats=leaf->seats;
+        }
 	}
 }//αν θελεις να σβησεις καποιον εκτως ουρασ δεν μπορεις (αν γεμησει τα rseats)
 
 
+
+void btreeandline::gotoline(int a,int key) {
+    if ((a==-1)&&(freeseats(key)>0)&&(searchkey(key)!=NULL)){
+        line *leaf=searchkey(key);
+        if (leaf==start){
+            delete start;
+            start=NULL;
+        }else{
+            if (previousqueue(key,leaf->first,leaf->last,start)!=NULL){
+                line *tobedeleted=previousqueue(key,leaf->first,leaf->last,start);
+                tobedeleted->next=leaf->next;//an ola afta uparxoun
+            }
+        }
+    }
+}
 
 
 line *btreeandline::searchqueue(int key,string first,string last){
@@ -367,15 +410,28 @@ void btreeandline::addqueue(int key,string first,string last){
 		cout<<"YOU ARE ALREADY ON QUEUE"<<endl;
 	}
 	else{
+        string country;string address;int tilefono;int diavatirio;
         cout<<"START :"<<start<<endl;
-		addqueue(key,first,last,lastonline(start));
+        cout<<"GIVE PASSPORT ID"<<endl;
+        cin>>diavatirio;
+        cout<<"GIVE PHONE NUMBER"<<endl;
+        cin>>tilefono;
+        cout<<"GIVE COUNTRY"<<endl;
+        cin>>country;
+        cout<<"GIVE ADDRESS"<<endl;
+        cin>>address;
+		addqueue(key,first,last,country,address,tilefono,diavatirio,lastonline(start));
 	}
 }
-void btreeandline::addqueue(int key,string first,string last,line *leaf){
+void btreeandline::addqueue(int key,string first,string last,string country,string address,int tilefono,int diavatirio,line *leaf){
 	leaf->next = new line;
 	leaf->next->key=key;
 	leaf->next->first=first;
 	leaf->next->last=last;
+    leaf->next->diavatirio=diavatirio;
+    leaf->next->country=country;
+    leaf->next->tilefono=tilefono;
+    leaf->next->address=address;
 	leaf->next->next=NULL;
 }
 
@@ -415,7 +471,8 @@ void btreeandline::removequeue(int key,string first,string last){
     cout<<"PREVIOUS "<<previousqueue(key,first,last,start)<<" 417 "<<endl;
     cout<<"THIS "<<searchqueue(key,first,last)<<" 418 "<<endl;
 	transportnext(previousqueue(key,first,last,start),searchqueue(key,first,last));//to search queue xalaei ta pada
-	
+    cout<<"SO A RESERVED SEAT WILL BE REMOVED"<<endl;
+    gotoline(-1,key);
 }
 
 
