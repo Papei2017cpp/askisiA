@@ -42,11 +42,13 @@ class btreeandline{
     private://Οι παρακατω διαδικασιες ειναι ΒΟΗΘΗΤΙΚΕΣ για την υλοποιηση των απο επανω
         node *root;//ορισμος τις ριζας
         node *search(int key,node *leaf);
+
         node *previous(int key,node *leaf);
         void transportnext(line *leaf, line *tobedel);
         void addflight(int key, node *leaf);
         void loudsearch(int key,node *leaf);
 		void forceadd(int key,node *leaf);
+        void swapnode(node *leaf,node *sec);
         int  freeseats(node *leaf);
         void reserved(int key , int a,node *leaf);
         bool isleaf(node *leaf);
@@ -471,9 +473,16 @@ void btreeandline::removeall(int key){
 
 void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ ΡΙΖΑ ;;;
 	if (search(key)!=NULL){
-		removeall(key);
-		node *leaf = search(key);
-		if (isleaf(leaf)) {
+        cout<<"ERROR" <<"  474"<<endl;
+
+        removeall(key);
+        cout<<"ERROR" <<"  477"<<endl;
+
+        node *leaf = search(key);
+        cout<<search(key) <<"  480"<<endl;
+
+        if (isleaf(leaf)) {
+            cout<<"ERROR" <<"  483"<<endl;
             if (previous(leaf->key)->key>leaf->key){
                 previous(leaf->key)->left=NULL;
             }else{
@@ -482,27 +491,35 @@ void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ Ρ
             delete leaf;
 		}
         else{
+            cout<<"ERROR" <<"  492"<<endl;
             //Αν ενα απο τα υποδενδρα εχει μονο 1 υποδενδρο απο την ιδια κατεφθυνση
-            if ((leaf->left->left!=NULL)&&(leaf->left->right==NULL)){
+            if (leaf->left!=NULL){
+                 if ((leaf->left->left!=NULL)&&(leaf->left->right==NULL)){
+                    cout<<"ERROR" <<"  495"<<endl;
+                    leaf=leaf->left;
 
-                leaf=leaf->left;
-
+                }
             }
-            else if (((leaf->right->left==NULL)&&(leaf->right->right!=NULL))){
+            else if(leaf->right!=NULL){
+                if (((leaf->right->left==NULL)&&(leaf->right->right!=NULL))){
+                    cout<<"ERROR" <<"  500"<<endl;
+                    leaf->right->left=leaf->left;
+                    swapnode(leaf,leaf->right);
 
-                leaf=leaf->right;
-
+                }
             }
-            else if (isleaf(leaf->left)){
+            if (isleaf(leaf->left)){
                 cout<<"ERROR"<<" 491"<<endl;
-                leaf->left->right=leaf->right;
-                leaf=leaf->left;
+                leaf->left->right=leaf->right;  
+                swapnode(leaf,leaf->left);
             }
             else if (isleaf(leaf->right)){
                 cout<<"ERROR"<<" 494"<<endl;
-                leaf=leaf->right;
-            }
+                leaf->right->left=leaf->left;
+                swapnode(leaf,leaf->right);
+            }//ΜΕΧΡΙ ΕΔΩ ΕΙΝΑΙ ΟΛΑ ΟΚΕΥ
             else if(leaf->left!=NULL){
+                cout<<"ERROR" <<"  514"<<endl;
                 if (isleaf(onlyWay(0,leaf))){//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
                     onlyWay(1,leaf)->right=NULL;
                     onlyWay(1,leaf)->left=leaf->left;
@@ -510,19 +527,25 @@ void btreeandline::deleteflight(int key){//ΑΝ ΔΙΑΓΡΑΨΟΥΜΕ ΤΗΝ Ρ
 
                 }
                 else{//αν δεν ειναι φυλλο τοτε θα εχει αριστερα πραγματα
-
+                    cout<<"ERROR" <<"  522"<<endl;
 
                 }
             }
             else if(leaf->right!=NULL) {
+
                 if (isleaf(onlyWay(1, leaf))) {//ελεγχος αν το κλειδι που θελουμε να διαγραψουμε εχει υποδενδρα
+                    cout<<"ERROR" <<"  529"<<endl;
                     onlyWay(1,leaf)->left=NULL;
                     onlyWay(1,leaf)->right=leaf->right;
                     leaf=onlyWay(1,leaf);
-                } else {//αν δεν ειναι φυλλο τοτε θα εχει δεξια πραγματα
-
+                }
+                else {//αν δεν ειναι φυλλο τοτε θα εχει δεξια πραγματα
+                    cout<<"ERROR" <<"  535"<<endl;
 
                 }
+            }
+            else{
+                cout<<"ERROR" <<"  540"<<endl;
             }
         }
 		cout<<"THE FLIGHT HAS BEEN DELETED"<<endl;
@@ -563,6 +586,30 @@ node *btreeandline::onlyWay(int a,node *leaf) {
     }
 
 }
+
+
+void btreeandline::swapnode(node *leaf,node *sec){
+
+    leaf->right=sec->right;
+    leaf->left=sec->left;
+    leaf->key=sec->key;
+    leaf->seats=sec->seats;
+    leaf->rseats=sec->rseats;
+    leaf->cost=sec->cost;
+    leaf->from[0]=sec->from[0];
+    leaf->from[1]=sec->from[1];
+    leaf->from[2]=sec->from[2];
+    leaf->from[3]=sec->from[3];
+    leaf->to[0]=sec->to[0];
+    leaf->to[1]=sec->to[1];
+    leaf->to[2]=sec->to[2];
+    leaf->to[3]=sec->to[3];
+    leaf->start.hours=sec->start.hours;
+    leaf->start.minutes=sec->start.minutes;
+    leaf->reach.hours=sec->reach.hours;
+    leaf->reach.minutes=sec->reach.minutes;
+}
+
 
 
 
